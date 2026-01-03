@@ -1,0 +1,51 @@
+{
+  "feature_importance": [
+    {"feature": "LandingPadUsed", "importance": 0.681, "direction": "positive", "description": "Whether a landing pad was designated"},
+    {"feature": "ReusedCount", "importance": 0.657, "direction": "positive", "description": "Number of times booster was reused"},
+    {"feature": "LandingHardwareScore", "importance": 0.346, "direction": "positive", "description": "Combined score of landing hardware"},
+    {"feature": "PayloadMassRelative", "importance": 0.320, "direction": "negative", "description": "Payload mass relative to capacity"},
+    {"feature": "Legs", "importance": 0.249, "direction": "positive", "description": "Landing legs deployed"},
+    {"feature": "Month", "importance": 0.206, "direction": "neutral", "description": "Month of launch"},
+    {"feature": "OverallRollingSuccess_5", "importance": 0.185, "direction": "positive", "description": "Rolling success rate (last 5 launches)"},
+    {"feature": "Quarter", "importance": 0.162, "direction": "neutral", "description": "Quarter of the year"},
+    {"feature": "BlockCumulativeFlights", "importance": 0.160, "direction": "positive", "description": "Cumulative flights for booster block"},
+    {"feature": "SiteCumulativeSuccess", "importance": 0.092, "direction": "positive", "description": "Cumulative success rate at launch site"},
+    {"feature": "DaysSinceBoosterFirstFlight", "importance": 0.071, "direction": "positive", "description": "Experience in days since first flight"},
+    {"feature": "OrbitRollingSuccess_5", "importance": 0.065, "direction": "positive", "description": "Rolling success rate for orbit type"},
+    {"feature": "PayloadMass", "importance": 0.062, "direction": "negative", "description": "Absolute payload mass in kg"},
+    {"feature": "GridFins", "importance": 0.047, "direction": "positive", "description": "Grid fins deployed for steering"},
+    {"feature": "FlightNumber", "importance": 0.047, "direction": "positive", "description": "Overall flight number in SpaceX history"}
+  ],
+  "top_features": [
+    "LandingPadUsed",
+    "ReusedCount",
+    "LandingHardwareScore",
+    "PayloadMassRelative",
+    "Legs"
+  ],
+  "key_insights": [
+    {
+      "title": "Landing Hardware is Critical",
+      "description": "LandingPadUsed and LandingHardwareScore are among the top predictors, confirming that proper landing infrastructure is essential for success."
+    },
+    {
+      "title": "Experience Matters",
+      "description": "ReusedCount and cumulative flight features show that SpaceX's learning curve significantly impacts landing success."
+    },
+    {
+      "title": "Payload Mass Impact",
+      "description": "Higher payload mass relative to capacity negatively affects landing probability, as expected from physics."
+    },
+    {
+      "title": "Hardware Configuration",
+      "description": "Legs and GridFins deployment are positive indicators, as they are required for controlled landing."
+    },
+    {
+      "title": "Historical Success Trends",
+      "description": "Rolling success rates (OverallRollingSuccess_5) indicate that recent performance is a strong predictor."
+    }
+  ],
+  "model_used": "XGBoost",
+  "explainer_type": "TreeExplainer",
+  "samples_analyzed": 18
+}

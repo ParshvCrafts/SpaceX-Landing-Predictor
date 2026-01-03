@@ -1,0 +1,2815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpaceX Falcon 9 Landing Prediction | ML Portfolio Project</title>
+    <meta name="description" content="Machine learning model predicting SpaceX Falcon 9 first stage landing success with 94.4% accuracy. XGBoost, SHAP interpretability, full-stack web application.">
+    <meta name="author" content="Parshv Patel">
+    <meta name="keywords" content="SpaceX, Falcon 9, Machine Learning, Data Science, XGBoost, SHAP, Landing Prediction, Parshv Patel">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SpaceX Falcon 9 Landing Prediction | ML Portfolio">
+    <meta property="og:description" content="Predicting Falcon 9 first stage landing success with 94.4% accuracy using XGBoost and SHAP interpretability.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=1200">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Performance: Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+    <!-- DNS Prefetch for additional resources -->
+    <link rel="dns-prefetch" href="https://cdn.plot.ly">
+    <link rel="dns-prefetch" href="https://unpkg.com">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    <meta name="theme-color" content="#0A0A14">
+
+    <!-- Fonts (with display=swap for better performance) -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Animation Libraries -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+    <!-- GSAP for smooth animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+
+    <!-- Three.js for 3D Space Background -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+
+    <!-- Anime.js for advanced animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+    <!-- Typed.js for typing effect -->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+    <!-- CountUp.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.8.0/countUp.umd.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Plotly.js for Sankey Diagram -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <!-- AOS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress"></div>
+
+    <!-- Three.js Space Background Canvas -->
+    <canvas id="space-bg"></canvas>
+
+    <!-- Morphing Background Elements -->
+    <div class="morph-bg morph-1"></div>
+    <div class="morph-bg morph-2"></div>
+    <div class="morph-bg morph-3"></div>
+
+    <!-- Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-content">
+            <div class="preloader-rocket">
+                <i class="fas fa-rocket"></i>
+            </div>
+            <div class="preloader-text">Loading SpaceX Predictor...</div>
+            <div class="preloader-bar">
+                <div class="preloader-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <span>SpaceX Predictor</span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#hero" class="nav-link active">Home</a></li>
+                <li><a href="#executive-summary" class="nav-link">Summary</a></li>
+                <li><a href="#challenge" class="nav-link">Challenge</a></li>
+                <li><a href="#pipeline" class="nav-link">Pipeline</a></li>
+                <li><a href="#models" class="nav-link">Models</a></li>
+                <li><a href="#gallery" class="nav-link">Gallery</a></li>
+                <li><a href="#predict" class="nav-link">Predict</a></li>
+                <li><a href="#detailed-analysis" class="nav-link">Analysis</a></li>
+                <li><a href="#conclusions" class="nav-link">Conclusions</a></li>
+                <li><a href="#developer" class="nav-link">Developer</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <div class="hero-badge" data-aos="fade-down">
+                <i class="fas fa-rocket"></i>
+                End-to-End Machine Learning Project
+            </div>
+
+            <h1 data-aos="fade-up" data-aos-delay="100">
+                <span class="hero-title-line">SpaceX Falcon 9</span>
+                <span class="hero-title-gradient" id="typed-text"></span>
+            </h1>
+
+            <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">
+                Predicting first stage booster landing success with 94.4% accuracy.
+                <br>Discovering that simpler models can outperform complex ensembles on small datasets.
+            </p>
+
+            <!-- Animated Stats -->
+            <div class="hero-stats" data-aos="fade-up" data-aos-delay="300">
+                <div class="stat-card glass-card hover-glow card-shine">
+                    <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+                    <div class="stat-value gradient-text" id="stat-accuracy" data-count="94.4">94.4%</div>
+                    <div class="stat-label">Model Accuracy</div>
+                </div>
+                <div class="stat-card glass-card hover-glow card-shine">
+                    <div class="stat-icon"><i class="fas fa-rocket"></i></div>
+                    <div class="stat-value gradient-text" id="stat-launches" data-count="90">90+</div>
+                    <div class="stat-label">Launches Analyzed</div>
+                </div>
+                <div class="stat-card glass-card hover-glow card-shine">
+                    <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                    <div class="stat-value gradient-text">$103M</div>
+                    <div class="stat-label">Cost Savings</div>
+                </div>
+                <div class="stat-card glass-card hover-glow card-shine">
+                    <div class="stat-icon"><i class="fas fa-brain"></i></div>
+                    <div class="stat-value gradient-text" id="stat-models" data-count="6">6</div>
+                    <div class="stat-label">ML Models</div>
+                </div>
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="hero-cta" data-aos="fade-up" data-aos-delay="400">
+                <a href="#predict" class="btn btn-primary btn-glow pulse-animation">
+                    <i class="fas fa-play"></i>
+                    Try Live Prediction
+                </a>
+                <a href="#challenge" class="btn btn-secondary hover-glow">
+                    <i class="fas fa-rocket"></i>
+                    Explore Project
+                </a>
+                <a href="https://github.com/parshvpatel" class="btn btn-outline hover-glow" target="_blank">
+                    <i class="fab fa-github"></i>
+                    View Code
+                </a>
+            </div>
+        </div>
+
+        <!-- Animated Rocket -->
+        <div class="hero-rocket" id="heroRocket">
+            <svg viewBox="0 0 100 200" class="rocket-svg">
+                <defs>
+                    <linearGradient id="rocketGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ffffff"/>
+                        <stop offset="100%" style="stop-color:#e0e0e0"/>
+                    </linearGradient>
+                    <linearGradient id="flameGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ff6b35"/>
+                        <stop offset="50%" style="stop-color:#f7931e"/>
+                        <stop offset="100%" style="stop-color:#ffcc00"/>
+                    </linearGradient>
+                </defs>
+                <!-- Rocket Body -->
+                <path d="M50,10 L60,50 L60,140 L40,140 L40,50 Z" fill="url(#rocketGradient)" stroke="#333" stroke-width="1"/>
+                <!-- Nose Cone -->
+                <path d="M40,50 L50,10 L60,50 Z" fill="#1a1a2e"/>
+                <!-- Fins -->
+                <path d="M40,120 L25,150 L40,140 Z" fill="#1a1a2e"/>
+                <path d="M60,120 L75,150 L60,140 Z" fill="#1a1a2e"/>
+                <!-- Window -->
+                <circle cx="50" cy="70" r="8" fill="#00d4aa" opacity="0.8"/>
+                <!-- SpaceX Logo Area -->
+                <rect x="42" y="85" width="16" height="30" fill="#1a1a2e" rx="2"/>
+                <!-- Flame -->
+                <path class="rocket-flame" d="M42,140 L50,180 L58,140 Z" fill="url(#flameGradient)" opacity="0.9"/>
+            </svg>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <span>Scroll to explore</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Executive Summary Section -->
+    <section id="executive-summary" class="section executive-summary-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Executive Summary</span>
+                <h2>Key Findings at a Glance</h2>
+                <p class="executive-subtitle">Machine learning models predict Falcon 9 first stage landing success with up to 94.4% accuracy, enabling accurate cost forecasting for the space industry</p>
+            </div>
+
+            <!-- Main Finding Highlight -->
+            <div class="key-finding-box" data-aos="fade-up" data-aos-delay="100">
+                <div class="finding-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="finding-content">
+                    <h3>The Bottom Line</h3>
+                    <p class="finding-main">Each successful landing saves approximately <span class="highlight-value">$62 million</span> in booster costs, enabling SpaceX to offer launches at <span class="highlight-value">$67M</span> vs competitors' <span class="highlight-value">$165M</span>.</p>
+                    <p class="finding-method">Analysis based on 90 Falcon 9 launches using EDA, SQL queries, geospatial analysis, and 4 machine learning algorithms.</p>
+                </div>
+            </div>
+
+            <!-- Top Insights Grid -->
+            <div class="insights-grid" data-aos="fade-up" data-aos-delay="200">
+                <div class="insight-card glass-card hover-glow" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="insight-icon rocket">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="insight-stat">100%</div>
+                    <h4>Flight Experience Matters</h4>
+                    <p>Boosters with 5+ flights achieve 100% landing success rate</p>
+                    <span class="insight-context">Experience-based reliability</span>
+                </div>
+
+                <div class="insight-card glass-card hover-glow" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="insight-icon satellite">
+                        <i class="fas fa-satellite"></i>
+                    </div>
+                    <div class="insight-stat">78.6%</div>
+                    <h4>Orbit Determines Outcome</h4>
+                    <p>LEO missions succeed at 78.6% vs GTO at just 52.4%</p>
+                    <span class="insight-context">LEO success rate</span>
+                </div>
+
+                <div class="insight-card glass-card hover-glow" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="insight-icon location">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="insight-stat">76.9%</div>
+                    <h4>Location Advantage</h4>
+                    <p>KSC LC-39A leads with 76.9% success rate</p>
+                    <span class="insight-context">Best performing site</span>
+                </div>
+
+                <div class="insight-card glass-card hover-glow" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="insight-icon brain">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="insight-stat">94.4%</div>
+                    <h4>ML Predictability</h4>
+                    <p>SVM and Decision Tree both achieve 94.4% accuracy</p>
+                    <span class="insight-context">Best model accuracy</span>
+                </div>
+            </div>
+
+            <!-- Why It Matters Section -->
+            <div class="why-it-matters-box" data-aos="fade-up" data-aos-delay="300">
+                <h3><i class="fas fa-question-circle"></i> Why These Findings Matter</h3>
+                <div class="matters-grid">
+                    <div class="matters-item">
+                        <div class="matters-icon"><i class="fas fa-handshake"></i></div>
+                        <div class="matters-text">
+                            <h4>For SpaceX Competitors</h4>
+                            <p>Understanding landing success factors helps competitors price bids accurately and identify opportunities where SpaceX may need new boosters.</p>
+                        </div>
+                    </div>
+                    <div class="matters-item">
+                        <div class="matters-icon"><i class="fas fa-satellite-dish"></i></div>
+                        <div class="matters-text">
+                            <h4>For Payload Customers</h4>
+                            <p>Predicting landing outcomes enables accurate mission cost estimation. GTO missions may require pricing adjustments due to lower recovery probability.</p>
+                        </div>
+                    </div>
+                    <div class="matters-item">
+                        <div class="matters-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="matters-text">
+                            <h4>For Investors & Analysts</h4>
+                            <p>Landing success directly correlates with fleet utilization and capital efficiency. Higher success rates mean lower capital expenditure needs.</p>
+                        </div>
+                    </div>
+                    <div class="matters-item">
+                        <div class="matters-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="matters-text">
+                            <h4>For Insurance Underwriters</h4>
+                            <p>Predictable landing outcomes reduce uncertainty in launch insurance pricing and risk assessment models.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Prompt -->
+            <div class="section-scroll-prompt" data-aos="fade-up">
+                <p>Scroll down to explore the detailed analysis</p>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Challenge Section - With SpaceX GIFs -->
+    <section id="challenge" class="section challenge-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">The Problem</span>
+                <h2>The Challenge of Landing Rockets</h2>
+                <p>Reusable rockets can save $103M per launch - but landing them is incredibly difficult</p>
+            </div>
+
+            <div class="challenge-grid">
+                <!-- Success GIF -->
+                <div class="challenge-card success" data-aos="fade-right" data-aos-delay="100">
+                    <div class="card-header">
+                        <div class="status-badge success">
+                            <i class="fas fa-check-circle"></i>
+                            Successful Landing
+                        </div>
+                    </div>
+                    <div class="gif-container">
+                        <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DS0701EN-SkillsNetwork/lab_v2/images/landing_1.gif"
+                             alt="SpaceX Falcon 9 Successful Landing"
+                             loading="lazy"
+                             class="landing-gif">
+                        <div class="gif-overlay">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Precision Touchdown</h3>
+                        <p>A Falcon 9 first stage successfully lands on the drone ship "Of Course I Still Love You" in the Atlantic Ocean.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> GridFins deployed for steering</li>
+                            <li><i class="fas fa-check"></i> Landing legs extended</li>
+                            <li><i class="fas fa-check"></i> Pinpoint accuracy achieved</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Failure GIF -->
+                <div class="challenge-card failure" data-aos="fade-left" data-aos-delay="200">
+                    <div class="card-header">
+                        <div class="status-badge failure">
+                            <i class="fas fa-times-circle"></i>
+                            Failed Attempt
+                        </div>
+                    </div>
+                    <div class="gif-container">
+                        <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DS0701EN-SkillsNetwork/lab_v2/images/crash.gif"
+                             alt="SpaceX Falcon 9 Landing Failure"
+                             loading="lazy"
+                             class="landing-gif">
+                        <div class="gif-overlay">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>When Things Go Wrong</h3>
+                        <p>Early landing attempts often ended in spectacular failures as SpaceX engineers learned to perfect the technology.</p>
+                        <ul class="feature-list failure">
+                            <li><i class="fas fa-times"></i> Insufficient fuel reserves</li>
+                            <li><i class="fas fa-times"></i> Control system failures</li>
+                            <li><i class="fas fa-times"></i> Hardware malfunctions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why It Matters -->
+            <div class="why-matters" data-aos="fade-up" data-aos-delay="300">
+                <div class="matters-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="matters-content">
+                    <h3>Why Prediction Matters</h3>
+                    <p>If we can predict whether a landing will succeed, we can estimate mission costs more accurately. A successful landing means the booster can be reused, reducing the cost from <span class="highlight-cost">$165M to $62M</span> - a savings of over <span class="highlight-savings">$103 million</span> per launch.</p>
+                </div>
+                <div class="cost-comparison">
+                    <div class="cost-item expendable">
+                        <span class="cost-label">Expendable</span>
+                        <span class="cost-value">$165M</span>
+                    </div>
+                    <div class="cost-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="cost-item reusable">
+                        <span class="cost-label">Reusable</span>
+                        <span class="cost-value">$62M</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Value Section -->
+    <section id="business" class="section business-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Business Impact</span>
+                <h2>Real-World Value</h2>
+                <p>How predictive analytics translates to competitive advantage in the space industry</p>
+            </div>
+
+            <div class="business-grid">
+                <!-- Cost Savings Card -->
+                <div class="business-card highlight" data-aos="fade-up">
+                    <div class="business-icon savings">
+                        <i class="fas fa-piggy-bank"></i>
+                    </div>
+                    <div class="business-value">$103M</div>
+                    <div class="business-label">Per Launch Savings</div>
+                    <p class="business-description">Each successful landing saves the cost of building a new booster. With reusability, SpaceX offers launch prices 50% below competitors.</p>
+                </div>
+
+                <!-- Accuracy Card -->
+                <div class="business-card glass-premium hover-glow" data-aos="fade-up" data-aos-delay="100">
+                    <div class="business-icon accuracy">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="business-value">94.4%</div>
+                    <div class="business-label">Prediction Accuracy</div>
+                    <p class="business-description">Our SVM model correctly predicts landing outcomes 17 out of 18 times, enabling accurate cost forecasting for customers.</p>
+                </div>
+
+                <!-- Market Impact Card -->
+                <div class="business-card glass-premium hover-glow" data-aos="fade-up" data-aos-delay="200">
+                    <div class="business-icon market">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="business-value">60%</div>
+                    <div class="business-label">Market Share</div>
+                    <p class="business-description">SpaceX dominates the commercial launch market thanks to reusability-driven cost advantages.</p>
+                </div>
+            </div>
+
+            <!-- Value Proposition -->
+            <div class="value-proposition" data-aos="fade-up">
+                <h3><i class="fas fa-lightbulb"></i> Why This Project Matters</h3>
+                <div class="proposition-grid">
+                    <div class="proposition-item">
+                        <div class="prop-icon"><i class="fas fa-handshake"></i></div>
+                        <div class="prop-content">
+                            <h4>For SpaceX Competitors</h4>
+                            <p>Predict SpaceX's pricing by estimating booster recovery likelihood. A company like ULA can better position bids knowing when SpaceX will likely need a new booster.</p>
+                        </div>
+                    </div>
+                    <div class="proposition-item">
+                        <div class="prop-icon"><i class="fas fa-satellite"></i></div>
+                        <div class="prop-content">
+                            <h4>For Payload Customers</h4>
+                            <p>Estimate total mission costs before contract negotiation. Higher-risk missions (GTO orbits, heavy payloads) may require pricing adjustments.</p>
+                        </div>
+                    </div>
+                    <div class="proposition-item">
+                        <div class="prop-icon"><i class="fas fa-chart-pie"></i></div>
+                        <div class="prop-content">
+                            <h4>For Investors</h4>
+                            <p>Understand SpaceX's operational efficiency and fleet utilization. Higher landing success = lower capital expenditure needs.</p>
+                        </div>
+                    </div>
+                    <div class="proposition-item">
+                        <div class="prop-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="prop-content">
+                            <h4>For Insurance Underwriters</h4>
+                            <p>Risk assessment for launch insurance premiums. Predictable landing outcomes reduce uncertainty in coverage pricing.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROI Calculator -->
+            <div class="roi-calculator" data-aos="fade-up">
+                <h3><i class="fas fa-calculator"></i> ROI Illustration</h3>
+                <div class="roi-grid">
+                    <div class="roi-item">
+                        <span class="roi-label">Annual SpaceX Launches (2023)</span>
+                        <span class="roi-value">~90</span>
+                    </div>
+                    <div class="roi-item">
+                        <span class="roi-label">Estimated Landing Success Rate</span>
+                        <span class="roi-value">95%</span>
+                    </div>
+                    <div class="roi-item">
+                        <span class="roi-label">Successful Recoveries/Year</span>
+                        <span class="roi-value">~86</span>
+                    </div>
+                    <div class="roi-item highlight">
+                        <span class="roi-label">Annual Savings from Reusability</span>
+                        <span class="roi-value">~$8.9 Billion</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Pipeline Section -->
+    <section id="pipeline" class="section pipeline-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Methodology</span>
+                <h2>Data Science Pipeline</h2>
+                <p>A comprehensive end-to-end machine learning workflow</p>
+            </div>
+
+            <div class="pipeline-container">
+                <!-- Pipeline Steps -->
+                <div class="pipeline-steps">
+                    <div class="pipeline-step" data-aos="fade-up" data-aos-delay="100">
+                        <div class="step-number">01</div>
+                        <div class="step-icon">
+                            <i class="fas fa-cloud-download-alt"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>Data Collection</h3>
+                            <p>SpaceX REST API & Wikipedia web scraping</p>
+                            <div class="step-tags">
+                                <span class="tag">REST API</span>
+                                <span class="tag">BeautifulSoup</span>
+                            </div>
+                        </div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <div class="pipeline-step" data-aos="fade-up" data-aos-delay="200">
+                        <div class="step-number">02</div>
+                        <div class="step-icon">
+                            <i class="fas fa-broom"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>Data Wrangling</h3>
+                            <p>Cleaning, missing values, type conversion</p>
+                            <div class="step-tags">
+                                <span class="tag">Pandas</span>
+                                <span class="tag">NumPy</span>
+                            </div>
+                        </div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <div class="pipeline-step" data-aos="fade-up" data-aos-delay="300">
+                        <div class="step-number">03</div>
+                        <div class="step-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>Exploratory Analysis</h3>
+                            <p>SQL queries, visualization, geographic analysis</p>
+                            <div class="step-tags">
+                                <span class="tag">SQL</span>
+                                <span class="tag">Folium</span>
+                                <span class="tag">Plotly</span>
+                            </div>
+                        </div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <div class="pipeline-step" data-aos="fade-up" data-aos-delay="400">
+                        <div class="step-number">04</div>
+                        <div class="step-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>Feature Engineering</h3>
+                            <p>20+ engineered features from raw data</p>
+                            <div class="step-tags">
+                                <span class="tag">Temporal</span>
+                                <span class="tag">Rolling Stats</span>
+                                <span class="tag">SMOTE</span>
+                            </div>
+                        </div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <div class="pipeline-step" data-aos="fade-up" data-aos-delay="500">
+                        <div class="step-number">05</div>
+                        <div class="step-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>Model Training</h3>
+                            <p>XGBoost, LightGBM, CatBoost with Optuna</p>
+                            <div class="step-tags">
+                                <span class="tag">XGBoost</span>
+                                <span class="tag">Ensemble</span>
+                                <span class="tag">Optuna</span>
+                            </div>
+                        </div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <div class="pipeline-step" data-aos="fade-up" data-aos-delay="600">
+                        <div class="step-number">06</div>
+                        <div class="step-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>SHAP Analysis</h3>
+                            <p>Model interpretability & feature importance</p>
+                            <div class="step-tags">
+                                <span class="tag">SHAP</span>
+                                <span class="tag">TreeExplainer</span>
+                            </div>
+                        </div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <div class="pipeline-step final" data-aos="fade-up" data-aos-delay="700">
+                        <div class="step-number">07</div>
+                        <div class="step-icon success">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>Deployment</h3>
+                            <p>FastAPI backend + Interactive web app</p>
+                            <div class="step-tags">
+                                <span class="tag">FastAPI</span>
+                                <span class="tag">JavaScript</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SQL Analysis Section -->
+    <section id="sql" class="section sql-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Data Exploration</span>
+                <h2>SQL Analysis Insights</h2>
+                <p>10 key queries that revealed patterns in SpaceX launch data</p>
+            </div>
+
+            <div class="sql-grid">
+                <!-- Query Cards -->
+                <div class="sql-card glass-card card-shine" data-aos="fade-up">
+                    <div class="sql-header">
+                        <span class="sql-number">01</span>
+                        <h4>Launch Site Analysis</h4>
+                    </div>
+                    <div class="sql-code">
+                        <code>SELECT Launch_Site, COUNT(*) as launches FROM spacex GROUP BY Launch_Site</code>
+                    </div>
+                    <div class="sql-result">
+                        <div class="result-item">
+                            <span class="result-label">KSC LC-39A</span>
+                            <span class="result-value highlight">41 launches</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">CCAFS SLC-40</span>
+                            <span class="result-value">26 launches</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">VAFB SLC-4E</span>
+                            <span class="result-value">13 launches</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sql-card glass-card card-shine" data-aos="fade-up" data-aos-delay="100">
+                    <div class="sql-header">
+                        <span class="sql-number">02</span>
+                        <h4>Success Rate by Site</h4>
+                    </div>
+                    <div class="sql-code">
+                        <code>SELECT Launch_Site, AVG(Class)*100 as success_rate FROM spacex GROUP BY Launch_Site</code>
+                    </div>
+                    <div class="sql-result">
+                        <div class="result-item">
+                            <span class="result-label">KSC LC-39A</span>
+                            <span class="result-value success">76.9%</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">CCAFS SLC-40</span>
+                            <span class="result-value">60.0%</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">VAFB SLC-4E</span>
+                            <span class="result-value">61.5%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sql-card glass-card card-shine" data-aos="fade-up" data-aos-delay="200">
+                    <div class="sql-header">
+                        <span class="sql-number">03</span>
+                        <h4>Heavy Payload Success</h4>
+                    </div>
+                    <div class="sql-code">
+                        <code>SELECT COUNT(*) FROM spacex WHERE Payload_Mass > 10000 AND Class = 1</code>
+                    </div>
+                    <div class="sql-result">
+                        <div class="result-item">
+                            <span class="result-label">Heavy (>10,000kg)</span>
+                            <span class="result-value">12 successful</span>
+                        </div>
+                        <div class="result-insight">Larger payloads require more fuel for landing burns, reducing success margin</div>
+                    </div>
+                </div>
+
+                <div class="sql-card glass-card card-shine" data-aos="fade-up">
+                    <div class="sql-header">
+                        <span class="sql-number">04</span>
+                        <h4>First Successful Landing</h4>
+                    </div>
+                    <div class="sql-code">
+                        <code>SELECT MIN(Date) FROM spacex WHERE Class = 1</code>
+                    </div>
+                    <div class="sql-result">
+                        <div class="result-item success-highlight">
+                            <i class="fas fa-trophy"></i>
+                            <span>December 22, 2015</span>
+                        </div>
+                        <div class="result-insight">Orbcomm-2 mission at LZ-1 - historic first orbital-class rocket landing</div>
+                    </div>
+                </div>
+
+                <div class="sql-card glass-card card-shine" data-aos="fade-up" data-aos-delay="100">
+                    <div class="sql-header">
+                        <span class="sql-number">05</span>
+                        <h4>Orbit Performance</h4>
+                    </div>
+                    <div class="sql-code">
+                        <code>SELECT Orbit, COUNT(*), AVG(Class)*100 FROM spacex GROUP BY Orbit ORDER BY AVG(Class) DESC</code>
+                    </div>
+                    <div class="sql-result">
+                        <div class="result-item">
+                            <span class="result-label">ISS Orbit</span>
+                            <span class="result-value success">100%</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">SSO</span>
+                            <span class="result-value">100%</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">GTO</span>
+                            <span class="result-value warning">52.6%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sql-card glass-card card-shine" data-aos="fade-up" data-aos-delay="200">
+                    <div class="sql-header">
+                        <span class="sql-number">06</span>
+                        <h4>Booster Reuse Stats</h4>
+                    </div>
+                    <div class="sql-code">
+                        <code>SELECT Reused, COUNT(*), AVG(Class)*100 FROM spacex GROUP BY Reused</code>
+                    </div>
+                    <div class="sql-result">
+                        <div class="result-item">
+                            <span class="result-label">New Boosters</span>
+                            <span class="result-value">58.3%</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Reused Boosters</span>
+                            <span class="result-value success">77.8%</span>
+                        </div>
+                        <div class="result-insight">Proven hardware outperforms new boosters!</div>
+                    </div>
+                </div>
+
+                <div class="sql-card glass-card card-shine" data-aos="fade-up">
+                    <div class="sql-header">
+                        <span class="sql-number">07</span>
+                        <h4>Payload Mass Range</h4>
+                    </div>
+                    <div class="sql-code">
+                        <code>SELECT MIN(Payload_Mass), MAX(Payload_Mass), AVG(Payload_Mass) FROM spacex WHERE Class=1</code>
+                    </div>
+                    <div class="sql-result">
+                        <div class="result-item">
+                            <span class="result-label">Minimum</span>
+                            <span class="result-value">362 kg</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Maximum</span>
+                            <span class="result-value">15,600 kg</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Average</span>
+                            <span class="result-value">5,238 kg</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sql-card glass-card card-shine" data-aos="fade-up" data-aos-delay="100">
+                    <div class="sql-header">
+                        <span class="sql-number">08</span>
+                        <h4>Booster Version Impact</h4>
+                    </div>
+                    <div class="sql-code">
+                        <code>SELECT Booster_Version, AVG(Class)*100 FROM spacex GROUP BY Booster_Version</code>
+                    </div>
+                    <div class="sql-result">
+                        <div class="result-item">
+                            <span class="result-label">Block 5</span>
+                            <span class="result-value success">87.5%</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Block 4</span>
+                            <span class="result-value">66.7%</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Block 3</span>
+                            <span class="result-value warning">40.0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sql-card glass-card card-shine" data-aos="fade-up" data-aos-delay="200">
+                    <div class="sql-header">
+                        <span class="sql-number">09</span>
+                        <h4>Customer Analysis</h4>
+                    </div>
+                    <div class="sql-code">
+                        <code>SELECT Customer, COUNT(*) FROM spacex GROUP BY Customer ORDER BY COUNT(*) DESC LIMIT 5</code>
+                    </div>
+                    <div class="sql-result">
+                        <div class="result-item">
+                            <span class="result-label">NASA (CRS)</span>
+                            <span class="result-value highlight">21 launches</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">SpaceX</span>
+                            <span class="result-value">12 launches</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Iridium</span>
+                            <span class="result-value">8 launches</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sql-card glass-card card-shine" data-aos="fade-up">
+                    <div class="sql-header">
+                        <span class="sql-number">10</span>
+                        <h4>Consecutive Success Streak</h4>
+                    </div>
+                    <div class="sql-code">
+                        <code>WITH RECURSIVE ... Calculate longest consecutive success streak</code>
+                    </div>
+                    <div class="sql-result">
+                        <div class="result-item success-highlight">
+                            <i class="fas fa-fire"></i>
+                            <span>24 consecutive landings</span>
+                        </div>
+                        <div class="result-insight">SpaceX achieved 24 successful landings in a row (2019-2020)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sql-summary" data-aos="fade-up">
+                <div class="summary-stat">
+                    <i class="fas fa-database"></i>
+                    <span class="stat-value">90</span>
+                    <span class="stat-label">Total Launches Analyzed</span>
+                </div>
+                <div class="summary-stat">
+                    <i class="fas fa-search"></i>
+                    <span class="stat-value">10</span>
+                    <span class="stat-label">SQL Queries Executed</span>
+                </div>
+                <div class="summary-stat">
+                    <i class="fas fa-lightbulb"></i>
+                    <span class="stat-value">5+</span>
+                    <span class="stat-label">Key Insights Discovered</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Model Comparison Section -->
+    <section id="models" class="section models-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Machine Learning</span>
+                <h2>Model Performance Comparison</h2>
+                <p>Discovering that simpler models excel on small datasets - a key data science lesson</p>
+            </div>
+
+            <!-- Original Models Table -->
+            <div class="model-table-section" data-aos="fade-up">
+                <h3 class="table-title"><i class="fas fa-flask"></i> Original Baseline Models</h3>
+                <p class="table-subtitle">Trained on SpaceX launch dataset with GridSearchCV hyperparameter tuning</p>
+                <div class="model-table-container">
+                    <table class="model-table">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>CV Accuracy</th>
+                                <th>Test Accuracy</th>
+                                <th>F1 Score</th>
+                                <th>Jaccard</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="winner">
+                                <td>
+                                    <div class="model-name">
+                                        <i class="fas fa-trophy"></i>
+                                        Support Vector Machine
+                                        <span class="badge">Best Overall</span>
+                                    </div>
+                                </td>
+                                <td><span class="metric-value">79.6%</span></td>
+                                <td><span class="metric-value highlight">94.4%</span></td>
+                                <td><span class="metric-value">96.0%</span></td>
+                                <td><span class="metric-value">92.3%</span></td>
+                            </tr>
+                            <tr>
+                                <td><div class="model-name"><i class="fas fa-chart-line"></i> Logistic Regression</div></td>
+                                <td><span class="metric-value">69.6%</span></td>
+                                <td><span class="metric-value">77.8%</span></td>
+                                <td><span class="metric-value">84.6%</span></td>
+                                <td><span class="metric-value">73.3%</span></td>
+                            </tr>
+                            <tr>
+                                <td><div class="model-name"><i class="fas fa-users"></i> K-Nearest Neighbors</div></td>
+                                <td><span class="metric-value">73.9%</span></td>
+                                <td><span class="metric-value">72.2%</span></td>
+                                <td><span class="metric-value">82.8%</span></td>
+                                <td><span class="metric-value">70.6%</span></td>
+                            </tr>
+                            <tr>
+                                <td><div class="model-name"><i class="fas fa-tree"></i> Decision Tree</div></td>
+                                <td><span class="metric-value">78.9%</span></td>
+                                <td><span class="metric-value">66.7%</span></td>
+                                <td><span class="metric-value">78.6%</span></td>
+                                <td><span class="metric-value">64.7%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Advanced Models Table -->
+            <div class="model-table-section" data-aos="fade-up" data-aos-delay="100">
+                <h3 class="table-title"><i class="fas fa-brain"></i> Advanced Gradient Boosting Models</h3>
+                <p class="table-subtitle">Enhanced features, SMOTE balancing, Optuna hyperparameter optimization</p>
+                <div class="model-table-container">
+                    <table class="model-table">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Train Acc</th>
+                                <th>Test Accuracy</th>
+                                <th>F1 Score</th>
+                                <th>ROC-AUC</th>
+                                <th>Precision</th>
+                                <th>Recall</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="winner-advanced">
+                                <td>
+                                    <div class="model-name">
+                                        <i class="fas fa-bolt"></i>
+                                        XGBoost
+                                        <span class="badge advanced">Top ROC-AUC</span>
+                                    </div>
+                                </td>
+                                <td><span class="metric-value">92.7%</span></td>
+                                <td><span class="metric-value">83.3%</span></td>
+                                <td><span class="metric-value">88.0%</span></td>
+                                <td><span class="metric-value highlight">95.8%</span></td>
+                                <td><span class="metric-value">84.6%</span></td>
+                                <td><span class="metric-value">91.7%</span></td>
+                            </tr>
+                            <tr class="winner-advanced">
+                                <td>
+                                    <div class="model-name">
+                                        <i class="fas fa-lightbulb"></i>
+                                        LightGBM
+                                        <span class="badge advanced">Top ROC-AUC</span>
+                                    </div>
+                                </td>
+                                <td><span class="metric-value">92.7%</span></td>
+                                <td><span class="metric-value">83.3%</span></td>
+                                <td><span class="metric-value">88.0%</span></td>
+                                <td><span class="metric-value highlight">95.8%</span></td>
+                                <td><span class="metric-value">84.6%</span></td>
+                                <td><span class="metric-value">91.7%</span></td>
+                            </tr>
+                            <tr>
+                                <td><div class="model-name"><i class="fas fa-layer-group"></i> Stacking Ensemble</div></td>
+                                <td><span class="metric-value">97.9%</span></td>
+                                <td><span class="metric-value">83.3%</span></td>
+                                <td><span class="metric-value">88.0%</span></td>
+                                <td><span class="metric-value">94.4%</span></td>
+                                <td><span class="metric-value">84.6%</span></td>
+                                <td><span class="metric-value">91.7%</span></td>
+                            </tr>
+                            <tr>
+                                <td><div class="model-name"><i class="fas fa-vote-yea"></i> Voting Ensemble</div></td>
+                                <td><span class="metric-value">95.8%</span></td>
+                                <td><span class="metric-value">77.8%</span></td>
+                                <td><span class="metric-value">84.6%</span></td>
+                                <td><span class="metric-value">94.4%</span></td>
+                                <td><span class="metric-value">78.6%</span></td>
+                                <td><span class="metric-value">91.7%</span></td>
+                            </tr>
+                            <tr>
+                                <td><div class="model-name"><i class="fas fa-cat"></i> CatBoost</div></td>
+                                <td><span class="metric-value">99.0%</span></td>
+                                <td><span class="metric-value">72.2%</span></td>
+                                <td><span class="metric-value">81.5%</span></td>
+                                <td><span class="metric-value">94.4%</span></td>
+                                <td><span class="metric-value">73.3%</span></td>
+                                <td><span class="metric-value">91.7%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Key Findings Box -->
+            <div class="findings-box" data-aos="fade-up" data-aos-delay="200">
+                <div class="finding-item">
+                    <div class="finding-icon"><i class="fas fa-star"></i></div>
+                    <div class="finding-content">
+                        <h4>Best Overall: SVM (94.4% Accuracy)</h4>
+                        <p>The original SVM with sigmoid kernel achieved the highest test accuracy, demonstrating that simpler models can excel with proper tuning.</p>
+                    </div>
+                </div>
+                <div class="finding-item">
+                    <div class="finding-icon"><i class="fas fa-chart-area"></i></div>
+                    <div class="finding-content">
+                        <h4>Best ROC-AUC: XGBoost & LightGBM (95.8%)</h4>
+                        <p>Advanced gradient boosting models excelled at class separation, critical for mission-critical predictions.</p>
+                    </div>
+                </div>
+                <div class="finding-item">
+                    <div class="finding-icon"><i class="fas fa-exclamation-circle"></i></div>
+                    <div class="finding-content">
+                        <h4>Key Data Science Lesson</h4>
+                        <p>Different random_state values (2 vs 42) created different test sets. With only 18 test samples, this explains the accuracy gap. <a href="#gallery" class="finding-link">See Investigation →</a></p>
+                    </div>
+                </div>
+                <div class="finding-item">
+                    <div class="finding-icon"><i class="fas fa-lightbulb"></i></div>
+                    <div class="finding-content">
+                        <h4>Simpler Can Be Better</h4>
+                        <p>SVM excels on small datasets (n=90) due to the bias-variance tradeoff. Kernel methods handle high-dimensional sparse data efficiently.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Important Statistical Caveat -->
+            <div class="statistical-warning" data-aos="fade-up">
+                <div class="warning-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="warning-content">
+                    <h3>Important Statistical Caveat</h3>
+                    <p>The 94.4% accuracy is based on only <strong>18 test samples</strong>. A single misclassification changes accuracy by <strong>5.6%</strong>. These results should be interpreted with caution:</p>
+                    <ul class="warning-list">
+                        <li><i class="fas fa-info-circle"></i> Confidence intervals are wide due to small sample size</li>
+                        <li><i class="fas fa-info-circle"></i> Performance may vary significantly on new data</li>
+                        <li><i class="fas fa-info-circle"></i> Cross-validation scores provide more robust estimates</li>
+                        <li><i class="fas fa-info-circle"></i> Production deployment would require larger validation set</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-card glass-card" data-aos="fade-right">
+                    <h3><i class="fas fa-chart-line"></i> ROC Curves</h3>
+                    <div class="chart-container">
+                        <canvas id="rocChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card glass-card" data-aos="fade-left">
+                    <h3><i class="fas fa-chart-radar"></i> Model Comparison Radar</h3>
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Training Methodology Cards -->
+            <div class="methodology-cards" data-aos="fade-up">
+                <div class="method-card">
+                    <div class="method-icon"><i class="fas fa-balance-scale"></i></div>
+                    <h4>Class Imbalance</h4>
+                    <p>SMOTE oversampling to balance 66%/34% success/failure ratio</p>
+                </div>
+                <div class="method-card">
+                    <div class="method-icon"><i class="fas fa-sliders-h"></i></div>
+                    <h4>Hyperparameter Tuning</h4>
+                    <p>Optuna Bayesian optimization with 100 trials per model</p>
+                </div>
+                <div class="method-card">
+                    <div class="method-icon"><i class="fas fa-layer-group"></i></div>
+                    <h4>Cross-Validation</h4>
+                    <p>10-fold Stratified K-Fold for robust evaluation</p>
+                </div>
+                <div class="method-card">
+                    <div class="method-icon"><i class="fas fa-ruler"></i></div>
+                    <h4>Feature Scaling</h4>
+                    <p>RobustScaler for outlier-resistant normalization</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHAP Interpretability Section - NO ANIMATIONS to prevent visibility bugs -->
+    <section id="shap" class="section shap-section no-animate">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Explainable AI</span>
+                <h2>SHAP Model Interpretability</h2>
+                <p>Understanding what drives landing predictions through SHapley Additive exPlanations</p>
+            </div>
+
+            <div class="shap-grid">
+                <!-- Feature Importance - Actual SHAP Values -->
+                <div class="shap-card large feature-importance">
+                    <h3><i class="fas fa-sort-amount-down"></i> Feature Importance (Actual SHAP Values)</h3>
+                    <p class="shap-description">Mean absolute SHAP values from XGBoost TreeExplainer on test set (18 samples)</p>
+
+                    <div class="feature-bars">
+                        <!-- Values from shap_feature_importance.csv -->
+                        <div class="feature-bar-item">
+                            <div class="feature-info">
+                                <span class="feature-name">LandingPadUsed</span>
+                                <span class="feature-impact positive importance-value">+0.681</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 100%;" data-width="100"></div>
+                            </div>
+                        </div>
+                        <div class="feature-bar-item">
+                            <div class="feature-info">
+                                <span class="feature-name">ReusedCount</span>
+                                <span class="feature-impact positive importance-value">+0.657</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 96%;" data-width="96"></div>
+                            </div>
+                        </div>
+                        <div class="feature-bar-item">
+                            <div class="feature-info">
+                                <span class="feature-name">LandingHardwareScore</span>
+                                <span class="feature-impact positive importance-value">+0.346</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 51%;" data-width="51"></div>
+                            </div>
+                        </div>
+                        <div class="feature-bar-item">
+                            <div class="feature-info">
+                                <span class="feature-name">PayloadMassRelative</span>
+                                <span class="feature-impact negative importance-value">-0.320</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill negative" style="width: 47%;" data-width="47"></div>
+                            </div>
+                        </div>
+                        <div class="feature-bar-item">
+                            <div class="feature-info">
+                                <span class="feature-name">Legs</span>
+                                <span class="feature-impact positive importance-value">+0.249</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 37%;" data-width="37"></div>
+                            </div>
+                        </div>
+                        <div class="feature-bar-item">
+                            <div class="feature-info">
+                                <span class="feature-name">OverallRollingSuccess</span>
+                                <span class="feature-impact positive importance-value">+0.185</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 27%;" data-width="27"></div>
+                            </div>
+                        </div>
+                        <div class="feature-bar-item">
+                            <div class="feature-info">
+                                <span class="feature-name">BlockCumulativeFlights</span>
+                                <span class="feature-impact positive importance-value">+0.160</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 23%;" data-width="23"></div>
+                            </div>
+                        </div>
+                        <div class="feature-bar-item">
+                            <div class="feature-info">
+                                <span class="feature-name">PayloadMass</span>
+                                <span class="feature-impact negative importance-value">-0.062</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill negative" style="width: 9%;" data-width="9"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Insights - Updated with actual findings - NO ANIMATION -->
+                <div class="shap-card">
+                    <h3><i class="fas fa-lightbulb"></i> Key Insights from SHAP Analysis</h3>
+
+                    <div class="insight-item">
+                        <div class="insight-icon success"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="insight-content">
+                            <h4>Landing Infrastructure is Critical</h4>
+                            <p>LandingPadUsed (0.681) is the #1 predictor. Designated landing pads significantly improve success probability.</p>
+                        </div>
+                    </div>
+
+                    <div class="insight-item">
+                        <div class="insight-icon success"><i class="fas fa-redo"></i></div>
+                        <div class="insight-content">
+                            <h4>Experience Drives Success</h4>
+                            <p>ReusedCount (0.657) shows boosters with prior flights have proven reliability. SpaceX's learning curve is evident.</p>
+                        </div>
+                    </div>
+
+                    <div class="insight-item">
+                        <div class="insight-icon warning"><i class="fas fa-weight-hanging"></i></div>
+                        <div class="insight-content">
+                            <h4>Payload Mass Impact</h4>
+                            <p>PayloadMassRelative (-0.320) negatively affects landing. Higher payload = less fuel for landing burn.</p>
+                        </div>
+                    </div>
+
+                    <div class="insight-item">
+                        <div class="insight-icon info"><i class="fas fa-chart-line"></i></div>
+                        <div class="insight-content">
+                            <h4>Historical Trends Matter</h4>
+                            <p>OverallRollingSuccess and BlockCumulativeFlights indicate that recent performance strongly predicts future success.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Waterfall Example -->
+            <div class="waterfall-section" data-aos="fade-up">
+                <h3>Example Prediction Explanation</h3>
+                <div class="waterfall-container">
+                    <div class="waterfall-header">
+                        <div class="prediction-result success">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Predicted: SUCCESS</span>
+                            <span class="confidence">82% Confidence</span>
+                        </div>
+                    </div>
+
+                    <div class="waterfall-chart">
+                        <div class="waterfall-item positive">
+                            <span class="wf-label">GridFins = True</span>
+                            <div class="wf-bar positive" style="width: 120px;"></div>
+                            <span class="wf-value">+0.15</span>
+                        </div>
+                        <div class="waterfall-item positive">
+                            <span class="wf-label">Legs = True</span>
+                            <div class="wf-bar positive" style="width: 120px;"></div>
+                            <span class="wf-value">+0.15</span>
+                        </div>
+                        <div class="waterfall-item positive">
+                            <span class="wf-label">Block = 5</span>
+                            <div class="wf-bar positive" style="width: 80px;"></div>
+                            <span class="wf-value">+0.10</span>
+                        </div>
+                        <div class="waterfall-item negative">
+                            <span class="wf-label">Payload = 8500kg</span>
+                            <div class="wf-bar negative" style="width: 40px;"></div>
+                            <span class="wf-value">-0.05</span>
+                        </div>
+                        <div class="waterfall-item positive">
+                            <span class="wf-label">Site = KSC LC-39A</span>
+                            <div class="wf-bar positive" style="width: 55px;"></div>
+                            <span class="wf-value">+0.07</span>
+                        </div>
+                    </div>
+
+                    <div class="waterfall-summary">
+                        <div class="base-value">Base: 0.50</div>
+                        <i class="fas fa-long-arrow-alt-right"></i>
+                        <div class="final-value">Final: 0.82</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analysis Deep Dive Gallery Section -->
+    <section id="gallery" class="section gallery-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Deep Dive</span>
+                <h2>Analysis Visualization Gallery</h2>
+                <p>Explore the complete visual analysis from notebooks - click any image to enlarge</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="gallery-tabs" data-aos="fade-up">
+                <button class="gallery-tab active" data-tab="original">
+                    <i class="fas fa-chart-bar"></i> Original Analysis
+                </button>
+                <button class="gallery-tab" data-tab="eda">
+                    <i class="fas fa-chart-bar"></i> EDA & Features
+                </button>
+                <button class="gallery-tab" data-tab="models">
+                    <i class="fas fa-brain"></i> Model Performance
+                </button>
+                <button class="gallery-tab" data-tab="shap-gallery">
+                    <i class="fas fa-project-diagram"></i> SHAP Analysis
+                </button>
+                <button class="gallery-tab" data-tab="investigation">
+                    <i class="fas fa-search"></i> Investigation
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="gallery-content">
+                <!-- Original Analysis Tab -->
+                <div class="gallery-panel active" id="panel-original">
+                    <div class="original-analysis-header" data-aos="fade-up">
+                        <div class="analysis-badge">
+                            <i class="fas fa-chart-line"></i>
+                            Baseline Analysis Results
+                        </div>
+                        <p class="original-description">Visualizations generated from the original notebooks using the baseline dataset and traditional ML models.</p>
+                    </div>
+
+                    <!-- EDA Visualizations from Original Notebooks -->
+                    <h4 class="gallery-subsection" data-aos="fade-up"><i class="fas fa-chart-pie"></i> Exploratory Data Analysis</h4>
+                    <div class="gallery-grid">
+                        <div class="gallery-item" data-aos="fade-up">
+                            <img src="images/eda/flight_vs_payload.png" alt="Flight Number vs Payload Mass" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Flight Number vs Payload</h4>
+                                <p>Correlation between flight sequence and payload mass</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
+                            <img src="images/eda/launchsite_success_rate.png" alt="Launch Site Success Rates" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Launch Site Success Rates</h4>
+                                <p>Success rates by launch facility</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
+                            <img src="images/eda/orbit_success_rate.png" alt="Orbit Type Success Rates" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Orbit Success Rates</h4>
+                                <p>How orbit type affects landing outcomes</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="300">
+                            <img src="images/eda/yearly_success_trend.png" alt="Yearly Success Trend" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Yearly Success Trend</h4>
+                                <p>SpaceX's learning curve over time</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up">
+                            <img src="images/eda/booster_success_rate.png" alt="Booster Version Success" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Booster Version Success</h4>
+                                <p>Success rates by Falcon 9 version</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
+                            <img src="images/eda/payload_distribution.png" alt="Payload Distribution" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Payload Distribution</h4>
+                                <p>Success/failure by payload mass ranges</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
+                            <img src="images/eda/class_distribution.png" alt="Class Distribution" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Class Distribution</h4>
+                                <p>Overall success vs failure ratio</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="300">
+                            <img src="images/eda/correlation_heatmap.png" alt="Feature Correlation" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Feature Correlation</h4>
+                                <p>Heatmap of feature relationships</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Original ML Model Results -->
+                    <h4 class="gallery-subsection" data-aos="fade-up"><i class="fas fa-brain"></i> Original ML Models (GridSearchCV)</h4>
+                    <div class="gallery-grid">
+                        <div class="gallery-item large" data-aos="fade-up">
+                            <img src="images/eda/confusion_matrices_comparison.png" alt="All Confusion Matrices" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Confusion Matrices Comparison</h4>
+                                <p>Side-by-side comparison of all 4 original models</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
+                            <img src="images/eda/model_accuracy_comparison.png" alt="Model Accuracy Comparison" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Model Accuracy Comparison</h4>
+                                <p>SVM achieves best accuracy at 94.4%</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
+                            <img src="images/eda/cm_svm_sigmoid.png" alt="SVM Confusion Matrix" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>SVM (Sigmoid Kernel)</h4>
+                                <p>Best model: 94.4% accuracy</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="300">
+                            <img src="images/eda/cm_decision_tree.png" alt="Decision Tree Confusion Matrix" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Decision Tree</h4>
+                                <p>94.4% accuracy (tied with SVM)</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up">
+                            <img src="images/eda/cm_logistic_regression.png" alt="Logistic Regression Confusion Matrix" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Logistic Regression</h4>
+                                <p>77.8% accuracy</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
+                            <img src="images/eda/cm_knn_k10.png" alt="KNN Confusion Matrix" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>K-Nearest Neighbors (k=10)</h4>
+                                <p>72.2% accuracy</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dataset Summary -->
+                    <h4 class="gallery-subsection" data-aos="fade-up"><i class="fas fa-database"></i> Dataset Overview</h4>
+                    <div class="gallery-grid">
+                        <div class="gallery-item large" data-aos="fade-up">
+                            <img src="images/eda/dataset_summary.png" alt="Dataset Summary" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Dataset Summary</h4>
+                                <p>90 launches with 72 one-hot encoded features</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EDA Tab (Advanced Features) -->
+                <div class="gallery-panel" id="panel-eda">
+                    <div class="gallery-grid">
+                        <div class="gallery-item" data-aos="fade-up">
+                            <img src="images/ml_advanced/temporal_analysis.png" alt="Temporal Analysis" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Temporal Analysis</h4>
+                                <p>Success rate trends over time showing SpaceX's learning curve</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
+                            <img src="images/ml_advanced/payload_analysis.png" alt="Payload Analysis" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Payload Analysis</h4>
+                                <p>Payload mass distribution and its impact on landing success</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
+                            <img src="images/ml_advanced/booster_experience_analysis.png" alt="Booster Experience" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Booster Experience</h4>
+                                <p>How reuse count affects landing probability</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="300">
+                            <img src="images/ml_advanced/feature_correlation_matrix.png" alt="Feature Correlation" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Feature Correlation Matrix</h4>
+                                <p>Relationships between engineered features</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Models Tab -->
+                <div class="gallery-panel" id="panel-models">
+                    <div class="gallery-grid">
+                        <div class="gallery-item" data-aos="fade-up">
+                            <img src="images/ml_advanced/model_comparison.png" alt="Model Comparison" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Model Comparison</h4>
+                                <p>Performance metrics across all advanced models</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
+                            <img src="images/ml_advanced/roc_curves.png" alt="ROC Curves" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>ROC Curves</h4>
+                                <p>Receiver Operating Characteristic curves for all models</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
+                            <img src="images/ml_advanced/precision_recall_curves.png" alt="Precision-Recall" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Precision-Recall Curves</h4>
+                                <p>Trade-off between precision and recall</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="300">
+                            <img src="images/ml_advanced/learning_curves.png" alt="Learning Curves" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Learning Curves</h4>
+                                <p>Model performance vs training set size</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up">
+                            <img src="images/ml_advanced/confusion_matrices.png" alt="Confusion Matrices" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Confusion Matrices</h4>
+                                <p>Prediction breakdown for each model</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
+                            <img src="images/ml_advanced/smote_comparison.png" alt="SMOTE" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>SMOTE Balancing</h4>
+                                <p>Before and after class balancing</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SHAP Gallery Tab -->
+                <div class="gallery-panel" id="panel-shap-gallery">
+                    <div class="gallery-grid">
+                        <div class="gallery-item" data-aos="fade-up">
+                            <img src="images/ml_advanced/shap_summary_beeswarm.png" alt="SHAP Beeswarm" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>SHAP Beeswarm Plot</h4>
+                                <p>Feature impact distribution across all predictions</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
+                            <img src="images/ml_advanced/shap_feature_importance.png" alt="SHAP Importance" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Feature Importance (SHAP)</h4>
+                                <p>Mean absolute SHAP values by feature</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
+                            <img src="images/ml_advanced/shap_dependence_plots.png" alt="SHAP Dependence" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>SHAP Dependence Plots</h4>
+                                <p>How feature values affect predictions</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="300">
+                            <img src="images/ml_advanced/feature_importance_comparison.png" alt="Feature Comparison" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>SHAP vs Built-in Importance</h4>
+                                <p>Comparing interpretation methods</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up">
+                            <img src="images/ml_advanced/shap_waterfall_correct.png" alt="Waterfall Correct" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Correct Prediction Breakdown</h4>
+                                <p>SHAP waterfall for a successful prediction</p>
+                            </div>
+                        </div>
+                        <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
+                            <img src="images/ml_advanced/shap_waterfall_incorrect.png" alt="Waterfall Incorrect" loading="lazy">
+                            <div class="gallery-caption">
+                                <h4>Misclassification Analysis</h4>
+                                <p>Understanding why the model was wrong</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Investigation Tab -->
+                <div class="gallery-panel" id="panel-investigation">
+                    <div class="investigation-content">
+                        <div class="investigation-card" data-aos="fade-up">
+                            <div class="investigation-header">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <h3>Why SVM (94.4%) Outperformed Advanced Models (83.3%)</h3>
+                            </div>
+                            <div class="investigation-body">
+                                <div class="finding-highlight critical">
+                                    <h4><i class="fas fa-random"></i> Different Test Sets Used!</h4>
+                                    <p>Original models: <code>random_state=2</code><br>
+                                       Advanced models: <code>random_state=42</code><br>
+                                       With only 18 test samples, different splits can cause 10%+ accuracy swings.</p>
+                                </div>
+                                <div class="finding-grid">
+                                    <div class="finding-card">
+                                        <h5><i class="fas fa-th"></i> Feature Differences</h5>
+                                        <p><strong>Original:</strong> 72 one-hot features (incl. sparse Serial columns)<br>
+                                           <strong>Advanced:</strong> 57 engineered features</p>
+                                    </div>
+                                    <div class="finding-card">
+                                        <h5><i class="fas fa-balance-scale"></i> Class Balancing</h5>
+                                        <p><strong>Original:</strong> No SMOTE<br>
+                                           <strong>Advanced:</strong> SMOTE (72→96 samples)</p>
+                                    </div>
+                                    <div class="finding-card">
+                                        <h5><i class="fas fa-database"></i> Small Dataset</h5>
+                                        <p>Only 90 samples total. Kernel methods like SVM often excel on small, high-dimensional data.</p>
+                                    </div>
+                                    <div class="finding-card">
+                                        <h5><i class="fas fa-graduation-cap"></i> Key Lesson</h5>
+                                        <p>More complexity ≠ better performance. The Bias-Variance tradeoff favors simpler models on small datasets.</p>
+                                    </div>
+                                </div>
+                                <div class="investigation-conclusion">
+                                    <h4><i class="fas fa-lightbulb"></i> What We Still Learned</h4>
+                                    <p>Despite the accuracy difference, SHAP analysis revealed the same key predictors: <strong>LandingPadUsed</strong>, <strong>ReusedCount</strong>, and <strong>GridFins/Legs</strong> are critical for landing success regardless of which model is used.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Presentation Section - NO ANIMATIONS to prevent visibility bugs -->
+    <section id="presentation" class="section presentation-section no-animate">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Documentation</span>
+                <h2>Project Presentation</h2>
+                <p>Complete capstone presentation with methodology, findings, and recommendations</p>
+            </div>
+
+            <div class="presentation-container">
+                <div class="presentation-preview">
+                    <div class="presentation-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div class="presentation-info">
+                        <h3>SpaceX Falcon 9 Landing Prediction</h3>
+                        <p class="presentation-subtitle">End-to-End Machine Learning Portfolio Project</p>
+                        <div class="presentation-meta">
+                            <span><i class="fas fa-user"></i> Parshv Patel</span>
+                            <span><i class="fas fa-file-alt"></i> PDF Presentation</span>
+                            <span><i class="fas fa-calendar"></i> 2024</span>
+                        </div>
+                        <div class="presentation-highlights">
+                            <div class="highlight-item">
+                                <i class="fas fa-database"></i>
+                                <span>Data Collection & Wrangling</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Exploratory Data Analysis</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-brain"></i>
+                                <span>Machine Learning Models</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-bullseye"></i>
+                                <span>Results & Conclusions</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="presentation-actions">
+                    <a href="DS_capstone_presentation.pdf" target="_blank" class="btn btn-primary btn-download">
+                        <i class="fas fa-external-link-alt"></i>
+                        View Presentation
+                    </a>
+                    <a href="DS_capstone_presentation.pdf" download class="btn btn-secondary btn-download">
+                        <i class="fas fa-download"></i>
+                        Download PDF
+                    </a>
+                </div>
+
+                <div class="presentation-toc">
+                    <h4><i class="fas fa-list"></i> Presentation Contents</h4>
+                    <div class="toc-grid">
+                        <div class="toc-item">
+                            <span class="toc-number">01</span>
+                            <span class="toc-title">Executive Summary</span>
+                        </div>
+                        <div class="toc-item">
+                            <span class="toc-number">02</span>
+                            <span class="toc-title">Introduction & Objectives</span>
+                        </div>
+                        <div class="toc-item">
+                            <span class="toc-number">03</span>
+                            <span class="toc-title">Data Collection Methodology</span>
+                        </div>
+                        <div class="toc-item">
+                            <span class="toc-number">04</span>
+                            <span class="toc-title">Data Wrangling & Cleaning</span>
+                        </div>
+                        <div class="toc-item">
+                            <span class="toc-number">05</span>
+                            <span class="toc-title">Exploratory Data Analysis</span>
+                        </div>
+                        <div class="toc-item">
+                            <span class="toc-number">06</span>
+                            <span class="toc-title">Interactive Visualizations</span>
+                        </div>
+                        <div class="toc-item">
+                            <span class="toc-number">07</span>
+                            <span class="toc-title">Machine Learning Pipeline</span>
+                        </div>
+                        <div class="toc-item">
+                            <span class="toc-number">08</span>
+                            <span class="toc-title">Results & Conclusions</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sankey Flow Diagram Section -->
+    <section id="sankey" class="section sankey-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Data Flow</span>
+                <h2>Launch to Landing Flow</h2>
+                <p>Visualizing the journey from launch site through orbit to landing outcome</p>
+            </div>
+
+            <div class="sankey-container" data-aos="fade-up">
+                <div id="sankeyDiagram" style="width: 100%; height: 500px;"></div>
+            </div>
+
+            <div class="sankey-legend" data-aos="fade-up">
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #00D4AA;"></span>
+                    <span>Successful Landing</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #EF4444;"></span>
+                    <span>Failed Landing</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #0066FF;"></span>
+                    <span>Launch Sites</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #A855F7;"></span>
+                    <span>Orbit Types</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Geospatial Insights Section -->
+    <section id="geospatial" class="section geospatial-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Geographic Analysis</span>
+                <h2>Launch Site Geospatial Insights</h2>
+                <p>Interactive map exploring SpaceX launch facilities and proximity analysis</p>
+            </div>
+
+            <div class="geospatial-content">
+                <!-- Map Embed -->
+                <div class="map-container" data-aos="fade-up">
+                    <div class="map-header">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <span>Interactive Folium Map</span>
+                        <a href="folium_map.html" target="_blank" class="map-fullscreen">
+                            <i class="fas fa-expand-alt"></i> Open Fullscreen
+                        </a>
+                    </div>
+                    <iframe src="folium_map.html" title="SpaceX Launch Sites Map" loading="lazy"></iframe>
+                </div>
+
+                <!-- Site Stats Grid -->
+                <div class="site-stats-grid" data-aos="fade-up">
+                    <div class="site-stat-card ksc">
+                        <div class="site-header">
+                            <div class="site-icon"><i class="fas fa-rocket"></i></div>
+                            <div class="site-info">
+                                <h4>KSC LC-39A</h4>
+                                <span>Kennedy Space Center, Florida</span>
+                            </div>
+                        </div>
+                        <div class="site-metrics">
+                            <div class="metric">
+                                <span class="metric-value">41</span>
+                                <span class="metric-label">Launches</span>
+                            </div>
+                            <div class="metric success">
+                                <span class="metric-value">76.9%</span>
+                                <span class="metric-label">Success Rate</span>
+                            </div>
+                        </div>
+                        <div class="site-facts">
+                            <p><i class="fas fa-history"></i> Historic Apollo 11 launch pad</p>
+                            <p><i class="fas fa-ruler"></i> 3.89 km from coastline</p>
+                        </div>
+                    </div>
+
+                    <div class="site-stat-card ccafs">
+                        <div class="site-header">
+                            <div class="site-icon"><i class="fas fa-rocket"></i></div>
+                            <div class="site-info">
+                                <h4>CCAFS SLC-40</h4>
+                                <span>Cape Canaveral, Florida</span>
+                            </div>
+                        </div>
+                        <div class="site-metrics">
+                            <div class="metric">
+                                <span class="metric-value">26</span>
+                                <span class="metric-label">Launches</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">60.0%</span>
+                                <span class="metric-label">Success Rate</span>
+                            </div>
+                        </div>
+                        <div class="site-facts">
+                            <p><i class="fas fa-star"></i> First Falcon 9 operational pad</p>
+                            <p><i class="fas fa-ship"></i> Drone ship recovery missions</p>
+                        </div>
+                    </div>
+
+                    <div class="site-stat-card vafb">
+                        <div class="site-header">
+                            <div class="site-icon"><i class="fas fa-rocket"></i></div>
+                            <div class="site-info">
+                                <h4>VAFB SLC-4E</h4>
+                                <span>Vandenberg AFB, California</span>
+                            </div>
+                        </div>
+                        <div class="site-metrics">
+                            <div class="metric">
+                                <span class="metric-value">13</span>
+                                <span class="metric-label">Launches</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">61.5%</span>
+                                <span class="metric-label">Success Rate</span>
+                            </div>
+                        </div>
+                        <div class="site-facts">
+                            <p><i class="fas fa-globe"></i> Polar & SSO missions</p>
+                            <p><i class="fas fa-mountain"></i> West Coast launch facility</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Physics Explanation -->
+                <div class="physics-explanation" data-aos="fade-up">
+                    <div class="physics-icon">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                    <div class="physics-content">
+                        <h3>The Physics of Site Selection</h3>
+                        <p>Florida's latitude (<strong>28.6°N</strong>) provides a crucial advantage: Earth's rotation gives eastward-launched rockets a <strong>~1,470 km/h velocity boost</strong> for free. This translates to approximately <strong>10% fuel savings</strong> for equatorial orbit missions compared to polar launches from California.</p>
+                        <div class="physics-details">
+                            <div class="physics-detail">
+                                <i class="fas fa-sync-alt"></i>
+                                <span>Eastward launches benefit from Earth's rotation</span>
+                            </div>
+                            <div class="physics-detail">
+                                <i class="fas fa-globe-americas"></i>
+                                <span>VAFB (California) required for polar orbits - no rotational boost</span>
+                            </div>
+                            <div class="physics-detail">
+                                <i class="fas fa-gas-pump"></i>
+                                <span>More fuel for landing means higher recovery success</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Distance Analysis -->
+                <div class="distance-analysis" data-aos="fade-up">
+                    <h3><i class="fas fa-ruler-combined"></i> KSC LC-39A Proximity Analysis</h3>
+                    <p class="distance-description">Safety distances from launch pad to nearest infrastructure (calculated using Haversine formula)</p>
+                    <div class="distance-grid">
+                        <div class="distance-item">
+                            <div class="distance-icon coastline"><i class="fas fa-water"></i></div>
+                            <div class="distance-value">3.89 km</div>
+                            <div class="distance-label">Atlantic Coastline</div>
+                        </div>
+                        <div class="distance-item">
+                            <div class="distance-icon railway"><i class="fas fa-train"></i></div>
+                            <div class="distance-value">15.21 km</div>
+                            <div class="distance-label">Florida East Coast Railway</div>
+                        </div>
+                        <div class="distance-item">
+                            <div class="distance-icon highway"><i class="fas fa-road"></i></div>
+                            <div class="distance-value">20.31 km</div>
+                            <div class="distance-label">Highway US-1</div>
+                        </div>
+                        <div class="distance-item">
+                            <div class="distance-icon city"><i class="fas fa-city"></i></div>
+                            <div class="distance-value">16.33 km</div>
+                            <div class="distance-label">Titusville, FL</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Prediction Tool -->
+    <section id="predict" class="section predict-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Interactive Tool</span>
+                <h2>Live Landing Prediction</h2>
+                <p>Enter launch parameters to predict Falcon 9 first stage landing success</p>
+            </div>
+
+            <div class="prediction-container" data-aos="fade-up">
+                <!-- Input Form -->
+                <div class="prediction-form">
+                    <h3><i class="fas fa-sliders-h"></i> Launch Parameters</h3>
+
+                    <div class="form-group">
+                        <label for="launchSite">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Launch Site
+                        </label>
+                        <select id="launchSite" class="form-control">
+                            <option value="KSC LC 39A">KSC LC-39A (Kennedy Space Center)</option>
+                            <option value="CCAFS SLC 40">CCAFS SLC-40 (Cape Canaveral)</option>
+                            <option value="VAFB SLC 4E">VAFB SLC-4E (Vandenberg)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="payloadMass">
+                            <i class="fas fa-weight-hanging"></i>
+                            Payload Mass: <span id="payloadDisplay">5,000</span> kg
+                        </label>
+                        <input type="range" id="payloadMass" class="form-range" min="0" max="20000" value="5000" step="100">
+                        <div class="range-labels">
+                            <span>0 kg</span>
+                            <span>Light</span>
+                            <span>Medium</span>
+                            <span>Heavy</span>
+                            <span>20,000 kg</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="block">
+                                <i class="fas fa-cube"></i>
+                                Booster Block
+                            </label>
+                            <select id="block" class="form-control">
+                                <option value="5">Block 5 (Latest)</option>
+                                <option value="4">Block 4</option>
+                                <option value="3">Block 3</option>
+                                <option value="2">Block 2</option>
+                                <option value="1">Block 1</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="flights">
+                                <i class="fas fa-redo"></i>
+                                Prior Flights
+                            </label>
+                            <select id="flights" class="form-control">
+                                <option value="1">1 (New)</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5+</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orbit">
+                            <i class="fas fa-satellite"></i>
+                            Target Orbit
+                        </label>
+                        <select id="orbit" class="form-control">
+                            <option value="LEO">LEO (Low Earth Orbit)</option>
+                            <option value="ISS">ISS (International Space Station)</option>
+                            <option value="SSO">SSO (Sun-Synchronous)</option>
+                            <option value="GTO">GTO (Geosynchronous Transfer)</option>
+                            <option value="GEO">GEO (Geosynchronous)</option>
+                            <option value="PO">PO (Polar Orbit)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group checkboxes">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="gridfins" checked>
+                            <span class="checkmark"></span>
+                            <i class="fas fa-th"></i> GridFins
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="legs" checked>
+                            <span class="checkmark"></span>
+                            <i class="fas fa-arrows-alt-v"></i> Landing Legs
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="reused">
+                            <span class="checkmark"></span>
+                            <i class="fas fa-recycle"></i> Reused Booster
+                        </label>
+                    </div>
+
+                    <button id="predictBtn" class="btn btn-primary btn-predict">
+                        <i class="fas fa-rocket"></i>
+                        Predict Landing
+                        <span class="btn-ripple"></span>
+                    </button>
+                </div>
+
+                <!-- Result Display -->
+                <div class="prediction-result" id="predictionResult">
+                    <div class="result-placeholder">
+                        <div class="placeholder-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <p>Configure launch parameters and click <strong>"Predict Landing"</strong> to see the result</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example Scenarios -->
+            <div class="example-scenarios" data-aos="fade-up">
+                <h3><i class="fas fa-lightbulb"></i> Try These Example Scenarios</h3>
+                <div class="scenarios-grid">
+                    <div class="scenario-card success" onclick="loadScenario('starlink')">
+                        <div class="scenario-header">
+                            <span class="scenario-badge success"><i class="fas fa-check"></i> High Success</span>
+                        </div>
+                        <h4>Starlink Mission</h4>
+                        <p>Routine LEO deployment with experienced Block 5 booster</p>
+                        <ul>
+                            <li><i class="fas fa-satellite"></i> KSC LC-39A, LEO orbit</li>
+                            <li><i class="fas fa-weight-hanging"></i> 4,000 kg payload</li>
+                            <li><i class="fas fa-recycle"></i> Reused Block 5</li>
+                        </ul>
+                    </div>
+                    <div class="scenario-card moderate" onclick="loadScenario('gto')">
+                        <div class="scenario-header">
+                            <span class="scenario-badge warning"><i class="fas fa-exclamation"></i> Moderate</span>
+                        </div>
+                        <h4>GTO Satellite</h4>
+                        <p>Heavy payload to geostationary transfer orbit</p>
+                        <ul>
+                            <li><i class="fas fa-satellite"></i> CCAFS SLC-40, GTO</li>
+                            <li><i class="fas fa-weight-hanging"></i> 12,000 kg payload</li>
+                            <li><i class="fas fa-cube"></i> New Block 5</li>
+                        </ul>
+                    </div>
+                    <div class="scenario-card failure" onclick="loadScenario('heavy')">
+                        <div class="scenario-header">
+                            <span class="scenario-badge danger"><i class="fas fa-times"></i> High Risk</span>
+                        </div>
+                        <h4>Maximum Payload</h4>
+                        <p>Expendable mission profile with minimal landing margin</p>
+                        <ul>
+                            <li><i class="fas fa-satellite"></i> VAFB SLC-4E, GEO</li>
+                            <li><i class="fas fa-weight-hanging"></i> 18,000 kg payload</li>
+                            <li><i class="fas fa-cube"></i> Block 3, no legs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Analysis Section -->
+    <section id="detailed-analysis" class="section analysis-deep-dive">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Deep Dive</span>
+                <h2>Detailed Analysis & Findings</h2>
+                <p>In-depth exploration of factors affecting Falcon 9 landing success</p>
+            </div>
+
+            <!-- Flight Number Analysis -->
+            <div class="analysis-block" data-aos="fade-up">
+                <h3><i class="fas fa-chart-line"></i> Flight Number vs. Launch Site Analysis</h3>
+                <div class="analysis-content-grid">
+                    <div class="analysis-insights">
+                        <div class="insight-item highlight">
+                            <h4><i class="fas fa-chart-bar"></i> Key Finding: Learning Curve Effect</h4>
+                            <p>The earliest flights all failed while the latest flights all succeeded. This demonstrates SpaceX's operational learning curve.</p>
+                        </div>
+                        <div class="insight-item">
+                            <h4><i class="fas fa-rocket"></i> Site-Specific Patterns</h4>
+                            <ul>
+                                <li><strong>CCAFS SLC 40:</strong> Approximately half of all launches, with higher failure rate when flight numbers were low</li>
+                                <li><strong>VAFB SLC 4E and KSC LC 39A:</strong> Higher success rates overall</li>
+                            </ul>
+                        </div>
+                        <div class="insight-item actionable">
+                            <h4><i class="fas fa-lightbulb"></i> Actionable Insight</h4>
+                            <p>Each new launch has a higher rate of success. Operational experience significantly improves outcomes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payload Analysis -->
+            <div class="analysis-block" data-aos="fade-up">
+                <h3><i class="fas fa-weight-hanging"></i> Payload Mass vs. Launch Site Analysis</h3>
+                <div class="analysis-content-grid">
+                    <div class="analysis-insights">
+                        <div class="insight-item">
+                            <h4><i class="fas fa-balance-scale"></i> Weight Impact</h4>
+                            <p>For every launch site, higher payload mass correlates with higher success rates. Most launches with payload mass over 7,000 kg were successful.</p>
+                        </div>
+                        <div class="insight-item highlight">
+                            <h4><i class="fas fa-trophy"></i> KSC LC-39A Excellence</h4>
+                            <p>This site has <strong>100% success rate</strong> for payload mass under 5,500 kg - unique among all sites.</p>
+                        </div>
+                        <div class="insight-item">
+                            <h4><i class="fas fa-exclamation-triangle"></i> VAFB Limitations</h4>
+                            <p>No rockets launched for heavy payloads (>10,000 kg) from VAFB-SLC, possibly due to trajectory or infrastructure constraints.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orbit Analysis -->
+            <div class="analysis-block" data-aos="fade-up">
+                <h3><i class="fas fa-globe"></i> Success Rate by Orbit Type</h3>
+                <div class="orbit-analysis">
+                    <div class="orbit-category success-100">
+                        <h4>100% Success Rate Orbits</h4>
+                        <div class="orbit-tags">
+                            <span class="orbit-tag">ES-L1</span>
+                            <span class="orbit-tag">GEO</span>
+                            <span class="orbit-tag">HEO</span>
+                            <span class="orbit-tag">SSO</span>
+                        </div>
+                        <p class="orbit-note"><i class="fas fa-info-circle"></i> Note: Small sample sizes limit statistical confidence</p>
+                    </div>
+
+                    <div class="orbit-category success-variable">
+                        <h4>50-85% Success Rate Orbits</h4>
+                        <div class="orbit-tags">
+                            <span class="orbit-tag">GTO</span>
+                            <span class="orbit-tag">ISS</span>
+                            <span class="orbit-tag">LEO</span>
+                            <span class="orbit-tag">MEO</span>
+                            <span class="orbit-tag">PO</span>
+                        </div>
+                        <p class="orbit-note">These common orbits show the true operational challenges</p>
+                    </div>
+
+                    <div class="orbit-insights">
+                        <div class="insight-item">
+                            <h4>LEO Orbit Pattern</h4>
+                            <p>Success appears related to flight number - more experience leads to better outcomes.</p>
+                        </div>
+                        <div class="insight-item">
+                            <h4>GTO Orbit Pattern</h4>
+                            <p>No relationship between flight number and success - suggests fundamentally different challenges due to fuel constraints.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yearly Trend Analysis -->
+            <div class="analysis-block" data-aos="fade-up">
+                <h3><i class="fas fa-calendar-alt"></i> Success Rate Yearly Trend</h3>
+                <div class="timeline-analysis">
+                    <div class="timeline-period">
+                        <div class="period-marker rise"></div>
+                        <div class="period-content">
+                            <h4>2013-2017: The Rise <i class="fas fa-arrow-up"></i></h4>
+                            <p>Steady improvement as SpaceX refined landing technology. Success rate climbed from ~40% to ~80%.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-period">
+                        <div class="period-marker plateau"></div>
+                        <div class="period-content">
+                            <h4>2014-2015: R&D Phase <i class="fas fa-flask"></i></h4>
+                            <p>Flat success rate during intensive research and development. SpaceX was testing, failing, and learning.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-period important">
+                        <div class="period-marker dip"></div>
+                        <div class="period-content">
+                            <h4>2017-2018: The Dip <i class="fas fa-arrow-down"></i></h4>
+                            <div class="important-callout">
+                                <strong><i class="fas fa-exclamation-triangle"></i> IMPORTANT:</strong> This decrease was NOT random!
+                            </div>
+                            <p><strong>Causes:</strong></p>
+                            <ul>
+                                <li>More difficult mission profiles attempted</li>
+                                <li>Intentional expendable launches (no landing attempted)</li>
+                                <li>Transition to upgraded Block 5 hardware with initial technical issues</li>
+                            </ul>
+                            <p class="pattern-highlight">This is a classic pattern during major technology upgrades.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-period">
+                        <div class="period-marker recovery"></div>
+                        <div class="period-content">
+                            <h4>2018-2020: Recovery <i class="fas fa-rocket"></i></h4>
+                            <p>Block 5 boosters proved reliable after initial growing pains. Success rate recovered and exceeded previous highs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ML Analysis Deep Dive -->
+            <div class="analysis-block" data-aos="fade-up">
+                <h3><i class="fas fa-brain"></i> Machine Learning Analysis Deep Dive</h3>
+
+                <div class="ml-deep-dive">
+                    <!-- Why SVM Won -->
+                    <div class="ml-insight-card success">
+                        <h4><i class="fas fa-trophy"></i> Why SVM Achieved 94.4% Accuracy</h4>
+                        <ul>
+                            <li><strong>Kernel Trick:</strong> Finds non-linear patterns in data</li>
+                            <li><strong>Small Dataset Friendly:</strong> Works well with ~90 samples</li>
+                            <li><strong>Regularization:</strong> Robust to overfitting</li>
+                        </ul>
+                    </div>
+
+                    <!-- False Positive Warning -->
+                    <div class="ml-insight-card warning">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Critical: False Positives Issue</h4>
+                        <p>The confusion matrix reveals that <strong>FALSE POSITIVES</strong> are the primary error type.</p>
+                        <div class="warning-explanation">
+                            <p><strong>What this means:</strong> Model predicts SUCCESS when actual outcome was FAILURE</p>
+                            <p><strong>Business Impact:</strong> Could lead to underestimating launch costs by assuming reusability</p>
+                            <p><strong>Mitigation:</strong> Use conservative estimates when model predicts success</p>
+                        </div>
+                    </div>
+
+                    <!-- Ensemble Paradox -->
+                    <div class="ml-insight-card insight">
+                        <h4><i class="fas fa-puzzle-piece"></i> The Ensemble Paradox</h4>
+                        <p>Advanced models (XGBoost, LightGBM) achieved only <strong>83.3%</strong> - WORSE than simple SVM.</p>
+                        <p><strong>Why?</strong> On small datasets, complex ensemble methods can overfit to training noise.</p>
+                        <div class="lesson-highlight">
+                            <strong>Key Lesson:</strong> More complex does not equal better. Model selection must match data characteristics.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Geospatial Insights -->
+            <div class="analysis-block" data-aos="fade-up">
+                <h3><i class="fas fa-map-marked-alt"></i> Geospatial Analysis: Why These Locations?</h3>
+                <div class="geo-insights-grid">
+                    <div class="geo-insight-card">
+                        <div class="geo-icon"><i class="fas fa-globe-americas"></i></div>
+                        <h4>Equator Proximity</h4>
+                        <p>The Earth rotates at <strong>1,670 km/hour</strong> at the equator. Rockets inherit this speed, getting a "free" velocity boost.</p>
+                        <div class="physics-note">
+                            <strong>Result:</strong> Up to 10% fuel savings = more payload capacity
+                        </div>
+                    </div>
+
+                    <div class="geo-insight-card">
+                        <div class="geo-icon"><i class="fas fa-water"></i></div>
+                        <h4>Coastal Safety</h4>
+                        <p>All launch sites are near coastlines. If something goes wrong, debris falls into the ocean rather than populated areas.</p>
+                        <div class="safety-note">
+                            A failed rocket can travel <strong>15-20 km in seconds</strong>.
+                        </div>
+                    </div>
+
+                    <div class="geo-insight-card highlight">
+                        <div class="geo-icon"><i class="fas fa-map-pin"></i></div>
+                        <h4>KSC LC-39A: Optimal Site</h4>
+                        <table class="distance-table">
+                            <tr><td>Coastline</td><td>3.88 km</td><td><i class="fas fa-check"></i></td></tr>
+                            <tr><td>Railway</td><td>15.23 km</td><td><i class="fas fa-check"></i></td></tr>
+                            <tr><td>Highway</td><td>20.33 km</td><td><i class="fas fa-check"></i></td></tr>
+                            <tr><td>Titusville</td><td>16.33 km</td><td><i class="fas fa-check"></i></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conclusions & Recommendations Section -->
+    <section id="conclusions" class="section conclusions-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Conclusions</span>
+                <h2>Key Conclusions & Recommendations</h2>
+                <p>Actionable insights for stakeholders in the commercial space industry</p>
+            </div>
+
+            <!-- Key Conclusions -->
+            <div class="conclusions-grid" data-aos="fade-up">
+                <div class="conclusion-card technical" data-aos="fade-up" data-aos-delay="100">
+                    <div class="conclusion-header">
+                        <div class="conclusion-icon"><i class="fas fa-cogs"></i></div>
+                        <h3>Technical</h3>
+                    </div>
+                    <div class="conclusion-body">
+                        <p class="conclusion-main">Landing success is primarily determined by mission physics (orbit type, payload mass) rather than random factors.</p>
+                        <div class="conclusion-evidence">
+                            <span class="evidence-label">Evidence:</span>
+                            <span>GTO missions show 26% lower success rate than LEO missions due to fuel budget constraints</span>
+                        </div>
+                        <div class="conclusion-implication">
+                            <i class="fas fa-arrow-right"></i>
+                            <span>SpaceX can accurately predict recovery probability before launch and plan accordingly</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conclusion-card operational" data-aos="fade-up" data-aos-delay="200">
+                    <div class="conclusion-header">
+                        <div class="conclusion-icon"><i class="fas fa-rocket"></i></div>
+                        <h3>Operational</h3>
+                    </div>
+                    <div class="conclusion-body">
+                        <p class="conclusion-main">Flight experience and hardware iteration drive continuous improvement.</p>
+                        <div class="conclusion-evidence">
+                            <span class="evidence-label">Evidence:</span>
+                            <span>Success rate improved from 0% to 100% over 7 years; Block 5 achieves near-perfect reliability</span>
+                        </div>
+                        <div class="conclusion-implication">
+                            <i class="fas fa-arrow-right"></i>
+                            <span>Competitors face a significant experience gap that cannot be closed quickly</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conclusion-card geographic" data-aos="fade-up" data-aos-delay="300">
+                    <div class="conclusion-header">
+                        <div class="conclusion-icon"><i class="fas fa-globe-americas"></i></div>
+                        <h3>Geographic</h3>
+                    </div>
+                    <div class="conclusion-body">
+                        <p class="conclusion-main">Launch site selection involves complex trade-offs between physics, safety, and customer requirements.</p>
+                        <div class="conclusion-evidence">
+                            <span class="evidence-label">Evidence:</span>
+                            <span>Florida sites benefit from ~1,470 km/h rotational velocity boost; VAFB necessary for polar orbits</span>
+                        </div>
+                        <div class="conclusion-implication">
+                            <i class="fas fa-arrow-right"></i>
+                            <span>Multi-site capability provides operational flexibility and mission optimization</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conclusion-card predictive" data-aos="fade-up" data-aos-delay="400">
+                    <div class="conclusion-header">
+                        <div class="conclusion-icon"><i class="fas fa-brain"></i></div>
+                        <h3>Predictive</h3>
+                    </div>
+                    <div class="conclusion-body">
+                        <p class="conclusion-main">Machine learning can predict landing outcomes with high accuracy, but small sample sizes warrant caution.</p>
+                        <div class="conclusion-evidence">
+                            <span class="evidence-label">Evidence:</span>
+                            <span>94.4% test accuracy with SVM/Decision Tree, but only 18 test samples</span>
+                        </div>
+                        <div class="conclusion-implication">
+                            <i class="fas fa-arrow-right"></i>
+                            <span>Models are useful for planning but should be validated with larger datasets</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conclusion-card economic" data-aos="fade-up" data-aos-delay="500">
+                    <div class="conclusion-header">
+                        <div class="conclusion-icon"><i class="fas fa-dollar-sign"></i></div>
+                        <h3>Economic</h3>
+                    </div>
+                    <div class="conclusion-body">
+                        <p class="conclusion-main">Reusability has fundamentally disrupted the launch industry economics.</p>
+                        <div class="conclusion-evidence">
+                            <span class="evidence-label">Evidence:</span>
+                            <span>$62M booster cost recovery per landing; ~50% of price advantage comes from reusability</span>
+                        </div>
+                        <div class="conclusion-implication">
+                            <i class="fas fa-arrow-right"></i>
+                            <span>Traditional launch providers must adapt or face continued market share loss</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="recommendations-container" data-aos="fade-up">
+                <h3 class="recommendations-title"><i class="fas fa-tasks"></i> Recommendations</h3>
+
+                <div class="recommendations-tabs">
+                    <button class="rec-tab active" data-tab="spacex">For SpaceX</button>
+                    <button class="rec-tab" data-tab="competitors">For Competitors</button>
+                    <button class="rec-tab" data-tab="customers">For Customers</button>
+                    <button class="rec-tab" data-tab="data-scientists">For Data Scientists</button>
+                </div>
+
+                <div class="rec-content active" id="rec-spacex">
+                    <div class="rec-item">
+                        <div class="rec-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="rec-text">
+                            <h4>Prioritize LEO and ISS missions for new booster qualification flights</h4>
+                            <p>Higher success probability builds flight heritage safely before risking boosters on GTO missions.</p>
+                        </div>
+                    </div>
+                    <div class="rec-item">
+                        <div class="rec-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="rec-text">
+                            <h4>Continue Block 5 optimization rather than introducing Block 6</h4>
+                            <p>Data shows Block 5 achieving near-perfect reliability; stability may be more valuable than incremental improvements.</p>
+                        </div>
+                    </div>
+                    <div class="rec-item">
+                        <div class="rec-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="rec-text">
+                            <h4>Implement ML-based pre-launch landing probability assessments</h4>
+                            <p>94.4% accuracy models can inform fuel loading, landing site selection, and customer communications.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rec-content" id="rec-competitors">
+                    <div class="rec-item">
+                        <div class="rec-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="rec-text">
+                            <h4>Focus on differentiation rather than reusability replication</h4>
+                            <p>SpaceX's 10-year data advantage is difficult to overcome; alternative competitive strategies may be more viable.</p>
+                        </div>
+                    </div>
+                    <div class="rec-item">
+                        <div class="rec-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="rec-text">
+                            <h4>Consider partnerships for landing technology licensing</h4>
+                            <p>Building in-house capability requires significant R&D investment and flight heritage accumulation.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rec-content" id="rec-customers">
+                    <div class="rec-item">
+                        <div class="rec-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="rec-text">
+                            <h4>Evaluate mission requirements carefully when selecting providers</h4>
+                            <p>SpaceX's reusability advantage is most significant for LEO missions; GTO missions may have smaller cost differential.</p>
+                        </div>
+                    </div>
+                    <div class="rec-item">
+                        <div class="rec-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="rec-text">
+                            <h4>Consider launch cadence requirements alongside cost</h4>
+                            <p>SpaceX's high launch rate enables schedule flexibility that may have operational value beyond cost savings.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rec-content" id="rec-data-scientists">
+                    <div class="rec-item">
+                        <div class="rec-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="rec-text">
+                            <h4>Validate models on larger datasets before production deployment</h4>
+                            <p>18-sample test sets produce wide confidence intervals; real-world performance may differ.</p>
+                        </div>
+                    </div>
+                    <div class="rec-item">
+                        <div class="rec-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="rec-text">
+                            <h4>Consider ensemble methods and additional feature engineering</h4>
+                            <p>Weather conditions, sea state, time-of-day, and other factors may improve prediction accuracy.</p>
+                        </div>
+                    </div>
+                    <div class="rec-item">
+                        <div class="rec-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="rec-text">
+                            <h4>Explore time-series approaches for trend prediction</h4>
+                            <p>Success rate improvement over time suggests non-stationary data that may benefit from temporal modeling.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Takeaway -->
+            <div class="final-takeaway" data-aos="fade-up">
+                <div class="takeaway-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="takeaway-content">
+                    <h3>The Bottom Line</h3>
+                    <p>This analysis demonstrates that Falcon 9 landing success is <strong>predictable and improvable</strong> through data-driven engineering. The combination of mission physics, operational experience, and machine learning creates a powerful framework for understanding and optimizing rocket reusability - the key to making humanity a multi-planetary species.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline" class="section timeline-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">History</span>
+                <h2>SpaceX Landing Milestones</h2>
+                <p>The journey from failure to routine rocket landings</p>
+            </div>
+
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+
+                <div class="timeline-item left" data-aos="fade-right">
+                    <div class="timeline-date">2013</div>
+                    <div class="timeline-content">
+                        <div class="timeline-icon failure"><i class="fas fa-flask"></i></div>
+                        <h3>First Attempts</h3>
+                        <p>Grasshopper test vehicle completes 744m hop. First controlled descent tests begin.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item right" data-aos="fade-left">
+                    <div class="timeline-date">2015</div>
+                    <div class="timeline-content">
+                        <div class="timeline-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
+                        <h3>Close Calls</h3>
+                        <p>Multiple drone ship landing attempts end in spectacular "rapid unscheduled disassemblies."</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item left" data-aos="fade-right">
+                    <div class="timeline-date">Dec 2015</div>
+                    <div class="timeline-content">
+                        <div class="timeline-icon success"><i class="fas fa-trophy"></i></div>
+                        <h3>First Success!</h3>
+                        <p>Orbcomm-2 mission achieves first successful landing at Landing Zone 1. History is made.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item right" data-aos="fade-left">
+                    <div class="timeline-date">2016</div>
+                    <div class="timeline-content">
+                        <div class="timeline-icon success"><i class="fas fa-ship"></i></div>
+                        <h3>Drone Ship Success</h3>
+                        <p>First successful landing on "Of Course I Still Love You" drone ship enables ocean landings.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item left" data-aos="fade-right">
+                    <div class="timeline-date">2017</div>
+                    <div class="timeline-content">
+                        <div class="timeline-icon success"><i class="fas fa-redo"></i></div>
+                        <h3>First Reuse</h3>
+                        <p>SES-10 mission flies on previously flown booster. First orbital-class rocket reuse in history.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item right" data-aos="fade-left">
+                    <div class="timeline-date">2018</div>
+                    <div class="timeline-content">
+                        <div class="timeline-icon success"><i class="fas fa-rocket"></i></div>
+                        <h3>Block 5 Era</h3>
+                        <p>Final Falcon 9 iteration designed for 10+ flights. Improved reliability and faster turnaround.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item left" data-aos="fade-right">
+                    <div class="timeline-date">2020</div>
+                    <div class="timeline-content">
+                        <div class="timeline-icon success"><i class="fas fa-check-double"></i></div>
+                        <h3>Routine Operations</h3>
+                        <p>Landing success exceeds 95%. Reusability becomes the norm, not the exception.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Rate Chart -->
+            <div class="timeline-chart" data-aos="fade-up">
+                <h3>Landing Success Rate Over Time</h3>
+                <div class="chart-container">
+                    <canvas id="timelineChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section id="tech" class="section tech-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Technologies</span>
+                <h2>Tech Stack</h2>
+                <p>Tools and technologies powering this project</p>
+            </div>
+
+            <div class="tech-grid">
+                <div class="tech-category" data-aos="fade-up" data-aos-delay="100">
+                    <h3><i class="fas fa-database"></i> Data Processing</h3>
+                    <div class="tech-items">
+                        <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python"><span>Python</span></div>
+                        <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" alt="Pandas"><span>Pandas</span></div>
+                        <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" alt="NumPy"><span>NumPy</span></div>
+                    </div>
+                </div>
+
+                <div class="tech-category" data-aos="fade-up" data-aos-delay="200">
+                    <h3><i class="fas fa-brain"></i> Machine Learning</h3>
+                    <div class="tech-items">
+                        <div class="tech-item"><span class="tech-icon">XGB</span><span>XGBoost</span></div>
+                        <div class="tech-item"><span class="tech-icon">LGB</span><span>LightGBM</span></div>
+                        <div class="tech-item"><span class="tech-icon">CAT</span><span>CatBoost</span></div>
+                        <div class="tech-item"><img src="https://shap.readthedocs.io/en/latest/_static/shap_logo.png" alt="SHAP"><span>SHAP</span></div>
+                    </div>
+                </div>
+
+                <div class="tech-category" data-aos="fade-up" data-aos-delay="300">
+                    <h3><i class="fas fa-chart-bar"></i> Visualization</h3>
+                    <div class="tech-items">
+                        <div class="tech-item"><span class="tech-icon">PLT</span><span>Matplotlib</span></div>
+                        <div class="tech-item"><span class="tech-icon">SNS</span><span>Seaborn</span></div>
+                        <div class="tech-item"><span class="tech-icon">PLY</span><span>Plotly</span></div>
+                        <div class="tech-item"><span class="tech-icon">FOL</span><span>Folium</span></div>
+                    </div>
+                </div>
+
+                <div class="tech-category" data-aos="fade-up" data-aos-delay="400">
+                    <h3><i class="fas fa-code"></i> Web Development</h3>
+                    <div class="tech-items">
+                        <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="FastAPI"><span>FastAPI</span></div>
+                        <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript"><span>JavaScript</span></div>
+                        <div class="tech-item"><span class="tech-icon">CHT</span><span>Chart.js</span></div>
+                        <div class="tech-item"><span class="tech-icon">GSAP</span><span>GSAP</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Developer Section -->
+    <section id="developer" class="section developer-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">About</span>
+                <h2>About the Developer</h2>
+                <p>The mind behind this machine learning project</p>
+            </div>
+
+            <div class="developer-content">
+                <!-- Developer Card -->
+                <div class="developer-card" data-aos="fade-up">
+                    <div class="developer-avatar">
+                        <div class="avatar-placeholder">
+                            <span class="avatar-initials">PP</span>
+                        </div>
+                    </div>
+                    <div class="developer-info">
+                        <h3 class="developer-name">Parshv Patel</h3>
+                        <p class="developer-title">Data Science & Machine Learning Student</p>
+                        <p class="developer-university">University of California, Berkeley</p>
+                        <div class="developer-badges">
+                            <span class="badge gpa-badge">4.0 GPA</span>
+                            <span class="badge major-badge">B.A. Data Science</span>
+                            <span class="badge focus-badge">AI & ML Focus</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Developer Bio -->
+                <div class="developer-bio" data-aos="fade-up" data-aos-delay="100">
+                    <h4>Hello! I'm Parshv Patel</h4>
+                    <p>I'm a freshman at UC Berkeley pursuing a B.A. in Data Science with a focus on AI and Machine Learning. With a perfect 4.0 GPA and a passion for transforming data into actionable insights, I specialize in building end-to-end machine learning solutions.</p>
+                    <p>From recommendation systems to performance analytics, I love creating projects that solve real-world problems. My work spans data wrangling, statistical modeling, deep learning, and full-stack deployment—bringing models from Jupyter notebooks to production-ready web applications.</p>
+                    <p>This SpaceX Falcon 9 Landing Prediction project demonstrates my ability to handle the complete data science pipeline: from data collection through API and web scraping, to exploratory analysis, machine learning modeling, and interactive web deployment.</p>
+                </div>
+
+                <!-- Developer Links -->
+                <div class="developer-links" data-aos="fade-up" data-aos-delay="200">
+                    <h4>Connect With Me</h4>
+                    <div class="links-grid">
+                        <a href="https://www.linkedin.com/in/parshv-patel-65a90326b/" target="_blank" rel="noopener noreferrer" class="dev-link linkedin">
+                            <i class="fab fa-linkedin"></i>
+                            <span class="link-text">LinkedIn</span>
+                            <span class="link-arrow"><i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="https://github.com/ParshvCrafts" target="_blank" rel="noopener noreferrer" class="dev-link github">
+                            <i class="fab fa-github"></i>
+                            <span class="link-text">GitHub</span>
+                            <span class="link-arrow"><i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="mailto:p1a2r3s4h5v6@gmail.com" class="dev-link email">
+                            <i class="fas fa-envelope"></i>
+                            <span class="link-text">Email</span>
+                            <span class="link-arrow"><i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="https://personal-website-rtzu.onrender.com/" target="_blank" rel="noopener noreferrer" class="dev-link portfolio">
+                            <i class="fas fa-globe"></i>
+                            <span class="link-text">Portfolio Website</span>
+                            <span class="link-arrow"><i class="fas fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Skills Highlight -->
+                <div class="developer-skills" data-aos="fade-up" data-aos-delay="300">
+                    <h4>Technical Expertise</h4>
+                    <div class="skills-tags">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Machine Learning</span>
+                        <span class="skill-tag">Data Visualization</span>
+                        <span class="skill-tag">SQL</span>
+                        <span class="skill-tag">Deep Learning</span>
+                        <span class="skill-tag">Full-Stack Development</span>
+                        <span class="skill-tag">Statistical Modeling</span>
+                        <span class="skill-tag">Web Scraping</span>
+                        <span class="skill-tag">API Integration</span>
+                        <span class="skill-tag">Scikit-learn</span>
+                        <span class="skill-tag">TensorFlow</span>
+                        <span class="skill-tag">Plotly</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <i class="fas fa-rocket"></i>
+                        <span>SpaceX Landing Predictor</span>
+                    </div>
+                    <p>End-to-End Machine Learning Portfolio Project. Predicting Falcon 9 first stage landing outcomes using state-of-the-art machine learning with 94.4% accuracy.</p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Project</h4>
+                    <ul>
+                        <li><a href="#executive-summary">Executive Summary</a></li>
+                        <li><a href="#pipeline">Methodology</a></li>
+                        <li><a href="#models">ML Models</a></li>
+                        <li><a href="#conclusions">Conclusions</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="https://github.com/ParshvCrafts" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                        <li><a href="https://www.linkedin.com/in/parshv-patel-65a90326b/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+                        <li><a href="https://personal-website-rtzu.onrender.com/" target="_blank" rel="noopener noreferrer">Portfolio</a></li>
+                        <li><a href="mailto:p1a2r3s4h5v6@gmail.com">Email</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-author">
+                    <h4>Developer</h4>
+                    <p class="author-name">Parshv Patel</p>
+                    <p>UC Berkeley | Data Science & ML</p>
+                    <div class="social-links">
+                        <a href="https://github.com/ParshvCrafts" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/parshv-patel-65a90326b/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="mailto:p1a2r3s4h5v6@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Parshv Patel. SpaceX Falcon 9 Landing Prediction Project.</p>
+                <p class="disclaimer">Built with Python, Plotly, Folium, Scikit-learn, and passion for data science.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script src="animations.js"></script>
+</body>
+</html>

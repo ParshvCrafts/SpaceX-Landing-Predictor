@@ -1,0 +1,109 @@
+{
+  "investigation_summary": {
+    "title": "Why SVM Outperformed Advanced Ensemble Models",
+    "conclusion": "The comparison is not apples-to-apples due to different experimental setups",
+    "key_finding": "Different random_state values mean different test sets were used"
+  },
+  "original_experiment": {
+    "notebook": "Machine Learning Prediction.ipynb",
+    "dataset": "dataset_part_2.csv + dataset_part_3.csv (one-hot encoded)",
+    "train_test_split": {
+      "test_size": 0.2,
+      "random_state": 2,
+      "test_samples": 18,
+      "train_samples": 72
+    },
+    "features": {
+      "count": 72,
+      "type": "One-hot encoded categorical (Orbit, LaunchSite, Serial)",
+      "includes_serial": true
+    },
+    "preprocessing": {
+      "scaler": "StandardScaler",
+      "smote": false
+    },
+    "hyperparameter_tuning": "GridSearchCV with cv=10",
+    "best_model": {
+      "name": "SVM",
+      "kernel": "sigmoid",
+      "C": 31.62,
+      "gamma": 0.0316,
+      "test_accuracy": 0.944,
+      "f1_score": 0.960,
+      "jaccard": 0.923
+    }
+  },
+  "advanced_experiment": {
+    "notebook": "Advanced_ML_Models.ipynb",
+    "dataset": "dataset_enhanced_features.csv (57 engineered features)",
+    "train_test_split": {
+      "test_size": 0.2,
+      "random_state": 42,
+      "test_samples": 18,
+      "train_samples": 72
+    },
+    "features": {
+      "count": 57,
+      "type": "Engineered features (temporal, rolling, interactions)",
+      "includes_serial": false
+    },
+    "preprocessing": {
+      "scaler": "RobustScaler",
+      "smote": true,
+      "smote_result": "72 -> 96 samples (balanced)"
+    },
+    "hyperparameter_tuning": "Optuna Bayesian Optimization (50 trials)",
+    "best_model": {
+      "name": "XGBoost / LightGBM (tied)",
+      "test_accuracy": 0.833,
+      "f1_score": 0.880,
+      "roc_auc": 0.958
+    }
+  },
+  "why_results_differ": [
+    {
+      "factor": "Different Test Sets",
+      "importance": "CRITICAL",
+      "explanation": "random_state=2 vs random_state=42 means completely different samples in test set. With only 18 test samples, 1-2 different predictions can swing accuracy by 5-10%."
+    },
+    {
+      "factor": "Feature Engineering",
+      "importance": "HIGH",
+      "explanation": "Original used 72 one-hot features including sparse Serial columns. Advanced used 57 engineered features which may have added noise on small dataset."
+    },
+    {
+      "factor": "SMOTE Oversampling",
+      "importance": "MEDIUM",
+      "explanation": "SMOTE creates synthetic samples which can sometimes hurt generalization on very small test sets."
+    },
+    {
+      "factor": "Small Sample Size",
+      "importance": "HIGH",
+      "explanation": "With only 90 total samples and 18 in test set, results have high variance. Kernel methods like SVM often excel on small datasets."
+    },
+    {
+      "factor": "Model Complexity",
+      "importance": "MEDIUM",
+      "explanation": "Gradient boosting models have more hyperparameters and may overfit. SVM with proper kernel can be more robust."
+    }
+  ],
+  "data_science_lessons": [
+    "Always use the same train/test split when comparing models",
+    "Small datasets (n<100) often favor simpler models (Bias-Variance tradeoff)",
+    "More features and complexity doesn't always mean better performance",
+    "SMOTE can hurt generalization if validation isn't done carefully",
+    "Report confidence intervals when test sets are small",
+    "Kernel methods (SVM) excel at finding complex decision boundaries in high-dimensional sparse data"
+  ],
+  "fair_comparison_needed": {
+    "recommendation": "To fairly compare, retrain all models with same random_state and feature set",
+    "expected_outcome": "Results would likely be closer, with advanced models potentially matching or exceeding SVM due to ensemble benefits"
+  },
+  "what_we_still_learned": [
+    "SHAP analysis revealed key predictive features regardless of model choice",
+    "LandingPadUsed and ReusedCount are the most important predictors",
+    "GridFins and Legs deployment are critical for landing success",
+    "Historical performance (rolling success rate) strongly predicts future outcomes",
+    "The ML pipeline is production-ready with proper feature engineering"
+  ]
+}

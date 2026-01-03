@@ -1,0 +1,154 @@
+{
+  "original_models": {
+    "LogisticRegression": {
+      "name": "Logistic Regression",
+      "type": "original",
+      "cv_accuracy": 0.696,
+      "test_accuracy": 0.778,
+      "f1_score": 0.846,
+      "jaccard": 0.733,
+      "hyperparameters": {
+        "C": 1,
+        "penalty": "l2",
+        "solver": "lbfgs"
+      }
+    },
+    "SVM": {
+      "name": "Support Vector Machine",
+      "type": "original",
+      "cv_accuracy": 0.796,
+      "test_accuracy": 0.944,
+      "f1_score": 0.960,
+      "jaccard": 0.923,
+      "hyperparameters": {
+        "C": 31.62,
+        "gamma": 0.0316,
+        "kernel": "sigmoid"
+      }
+    },
+    "DecisionTree": {
+      "name": "Decision Tree",
+      "type": "original",
+      "cv_accuracy": 0.789,
+      "test_accuracy": 0.667,
+      "f1_score": 0.786,
+      "jaccard": 0.647,
+      "hyperparameters": {
+        "criterion": "entropy",
+        "max_depth": 16,
+        "splitter": "random"
+      }
+    },
+    "KNN": {
+      "name": "K-Nearest Neighbors",
+      "type": "original",
+      "cv_accuracy": 0.739,
+      "test_accuracy": 0.722,
+      "f1_score": 0.828,
+      "jaccard": 0.706,
+      "hyperparameters": {
+        "n_neighbors": 10,
+        "algorithm": "auto",
+        "p": 1
+      }
+    }
+  },
+  "advanced_models": {
+    "XGBoost": {
+      "name": "XGBoost",
+      "type": "advanced",
+      "train_accuracy": 0.927,
+      "test_accuracy": 0.833,
+      "precision": 0.846,
+      "recall": 0.917,
+      "f1_score": 0.880,
+      "jaccard": 0.786,
+      "mcc": 0.614,
+      "roc_auc": 0.958
+    },
+    "LightGBM": {
+      "name": "LightGBM",
+      "type": "advanced",
+      "train_accuracy": 0.927,
+      "test_accuracy": 0.833,
+      "precision": 0.846,
+      "recall": 0.917,
+      "f1_score": 0.880,
+      "jaccard": 0.786,
+      "mcc": 0.614,
+      "roc_auc": 0.958
+    },
+    "CatBoost": {
+      "name": "CatBoost",
+      "type": "advanced",
+      "train_accuracy": 0.990,
+      "test_accuracy": 0.722,
+      "precision": 0.733,
+      "recall": 0.917,
+      "f1_score": 0.815,
+      "jaccard": 0.688,
+      "mcc": 0.316,
+      "roc_auc": 0.944
+    }
+  },
+  "ensemble_models": {
+    "VotingClassifier": {
+      "name": "Voting Ensemble (Soft)",
+      "type": "ensemble",
+      "train_accuracy": 0.958,
+      "test_accuracy": 0.778,
+      "precision": 0.786,
+      "recall": 0.917,
+      "f1_score": 0.846,
+      "jaccard": 0.733,
+      "mcc": 0.472,
+      "roc_auc": 0.944
+    },
+    "StackingClassifier": {
+      "name": "Stacking Ensemble",
+      "type": "ensemble",
+      "train_accuracy": 0.979,
+      "test_accuracy": 0.833,
+      "precision": 0.846,
+      "recall": 0.917,
+      "f1_score": 0.880,
+      "jaccard": 0.786,
+      "mcc": 0.614,
+      "roc_auc": 0.944
+    }
+  },
+  "best_models": {
+    "original_best": {
+      "name": "SVM",
+      "test_accuracy": 0.944,
+      "f1_score": 0.960
+    },
+    "advanced_best": {
+      "name": "XGBoost",
+      "test_accuracy": 0.833,
+      "roc_auc": 0.958
+    },
+    "overall_best": {
+      "name": "SVM (Original)",
+      "reason": "Highest test accuracy at 94.4%",
+      "note": "Advanced models trained on enhanced feature set with SMOTE, different data split"
+    }
+  },
+  "dataset_info": {
+    "total_samples": 90,
+    "train_samples": 72,
+    "test_samples": 18,
+    "features_original": 72,
+    "features_enhanced": 57,
+    "class_distribution": {
+      "success": 60,
+      "failure": 30,
+      "success_rate": 0.667
+    }
+  },
+  "key_findings": {
+    "original_analysis": "SVM achieved the highest test accuracy (94.4%) among baseline models",
+    "advanced_analysis": "XGBoost, LightGBM, and Stacking all achieved 83.3% test accuracy with ROC-AUC up to 95.8%",
+    "note": "Different train/test splits and feature engineering approaches were used, making direct comparison complex"
+  }
+}

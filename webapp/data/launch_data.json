@@ -1,0 +1,97 @@
+{
+  "summary": {
+    "total_launches": 90,
+    "successful_landings": 60,
+    "failed_landings": 30,
+    "success_rate": 0.667
+  },
+  "by_launch_site": {
+    "CCSFS_SLC_40": {
+      "name": "CCSFS SLC 40 (Cape Canaveral)",
+      "total": 42,
+      "success": 28,
+      "failure": 14,
+      "success_rate": 0.667
+    },
+    "KSC_LC_39A": {
+      "name": "KSC LC 39A (Kennedy Space Center)",
+      "total": 39,
+      "success": 26,
+      "failure": 13,
+      "success_rate": 0.667
+    },
+    "VAFB_SLC_4E": {
+      "name": "VAFB SLC 4E (Vandenberg)",
+      "total": 9,
+      "success": 6,
+      "failure": 3,
+      "success_rate": 0.667
+    }
+  },
+  "by_orbit": {
+    "LEO": {"name": "Low Earth Orbit", "total": 19, "success": 16, "failure": 3},
+    "ISS": {"name": "International Space Station", "total": 17, "success": 15, "failure": 2},
+    "GTO": {"name": "Geostationary Transfer Orbit", "total": 22, "success": 14, "failure": 8},
+    "SSO": {"name": "Sun-Synchronous Orbit", "total": 7, "success": 5, "failure": 2},
+    "PO": {"name": "Polar Orbit", "total": 9, "success": 7, "failure": 2},
+    "VLEO": {"name": "Very Low Earth Orbit", "total": 5, "success": 3, "failure": 2},
+    "GEO": {"name": "Geostationary Orbit", "total": 4, "success": 2, "failure": 2},
+    "HEO": {"name": "Highly Elliptical Orbit", "total": 3, "success": 1, "failure": 2},
+    "MEO": {"name": "Medium Earth Orbit", "total": 2, "success": 1, "failure": 1},
+    "ES-L1": {"name": "Earth-Sun L1", "total": 1, "success": 0, "failure": 1},
+    "SO": {"name": "Sub-Orbital", "total": 1, "success": 0, "failure": 1}
+  },
+  "by_year": {
+    "2010": {"total": 1, "success": 0, "failure": 1},
+    "2012": {"total": 2, "success": 0, "failure": 2},
+    "2013": {"total": 3, "success": 0, "failure": 3},
+    "2014": {"total": 6, "success": 0, "failure": 6},
+    "2015": {"total": 7, "success": 3, "failure": 4},
+    "2016": {"total": 8, "success": 5, "failure": 3},
+    "2017": {"total": 18, "success": 14, "failure": 4},
+    "2018": {"total": 21, "success": 18, "failure": 3},
+    "2019": {"total": 13, "success": 11, "failure": 2},
+    "2020": {"total": 11, "success": 9, "failure": 2}
+  },
+  "sankey_flow": {
+    "nodes": [
+      "KSC LC-39A", "CCAFS SLC-40", "VAFB SLC-4E",
+      "LEO", "ISS", "GTO", "SSO", "PO",
+      "Success", "Failure"
+    ],
+    "links": [
+      {"source": 0, "target": 3, "value": 6},
+      {"source": 0, "target": 4, "value": 12},
+      {"source": 0, "target": 5, "value": 15},
+      {"source": 0, "target": 6, "value": 3},
+      {"source": 0, "target": 7, "value": 3},
+      {"source": 1, "target": 3, "value": 10},
+      {"source": 1, "target": 4, "value": 5},
+      {"source": 1, "target": 5, "value": 7},
+      {"source": 1, "target": 6, "value": 2},
+      {"source": 1, "target": 7, "value": 4},
+      {"source": 2, "target": 6, "value": 2},
+      {"source": 2, "target": 7, "value": 7},
+      {"source": 3, "target": 8, "value": 14},
+      {"source": 3, "target": 9, "value": 2},
+      {"source": 4, "target": 8, "value": 14},
+      {"source": 4, "target": 9, "value": 3},
+      {"source": 5, "target": 8, "value": 14},
+      {"source": 5, "target": 9, "value": 8},
+      {"source": 6, "target": 8, "value": 5},
+      {"source": 6, "target": 9, "value": 2},
+      {"source": 7, "target": 8, "value": 9},
+      {"source": 7, "target": 9, "value": 5}
+    ]
+  },
+  "timeline_milestones": [
+    {"year": 2010, "event": "First Falcon 9 launch", "success": false},
+    {"year": 2012, "event": "First cargo mission to ISS", "success": true},
+    {"year": 2015, "event": "First successful booster landing (ASDS)", "success": true},
+    {"year": 2016, "event": "First ocean platform landing", "success": true},
+    {"year": 2017, "event": "First reused booster flight", "success": true},
+    {"year": 2018, "event": "First Block 5 booster", "success": true},
+    {"year": 2019, "event": "Starlink constellation begins", "success": true},
+    {"year": 2020, "event": "First crewed Dragon flight", "success": true}
+  ]
+}
